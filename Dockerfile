@@ -32,11 +32,12 @@ RUN apt-get update \
 COPY entrypoint.sh /entrypoint.sh
 # If we were using a base image, we would you the locale setting as well.
 
-# Source the ROS2 environment
-RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
-
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
 CMD ["/bin/bash"]
+
+
+# Source the ROS2 environment (Not working right now)
+RUN echo "source /opt/ros/lyrical/setup.bash" >> /home/ros/.bashrc
 
 # Set the default user. Omit if we want to keep the default as root
 # USER $USERNAME

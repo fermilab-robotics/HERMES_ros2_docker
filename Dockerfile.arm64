@@ -28,15 +28,20 @@ RUN apt-get update \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
     && rm -rf /var/lib/apt/lists/*
 
+# Install demo_nodes for testing
+RUN apt-get update \
+    && apt-get install -y ros-lyrical-demo-nodes-cpp \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY entrypoint.sh /entrypoint.sh
 # If we were using a base image, we would you the locale setting as well.
 
-# Source the ROS2 environment
-RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
 CMD ["/bin/bash"]
+
+# Source the ROS2 environment! Working!
+RUN echo "source /opt/ros/lyrical/setup.bash" >> /home/ros/.bashrc
 
 # Set the default user. Omit if we want to keep the default as root
 # USER $USERNAME
