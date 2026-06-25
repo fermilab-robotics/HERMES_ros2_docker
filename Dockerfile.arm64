@@ -4,7 +4,7 @@ RUN apt-get update \
     && apt-get install -y nano \
     && rm -rf /var/lib/apt/lists/*
 
-COPY config/ /site_config/
+# COPY config/ /site_config/
 
 # Create a non-root user. Note that the username is different from host!
 ARG USERNAME=ros
