@@ -58,7 +58,7 @@ ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 # Force Cyclone to Wi-Fi using modern syntax
 # Hardcoded to point directly at the Laptop
 COPY cyclonedds_pi.xml /cyclonedds.xml
-ENV CYCLONEDDS_URI="file://cyclonedds.xml"
+ENV CYCLONEDDS_URI="file:///cyclonedds.xml"
 
 # --- ADD THIS BLOCK FOR ROSDEP ---
 WORKDIR /home/ros/ws
@@ -74,7 +74,7 @@ RUN rosdep init || true \
 RUN apt-get update \
     && rosdep install -y --ignore-src -r \
     # Only install from those that are needed for server
-        --from-paths src/my_bringup src/motor_driver_py \
+        --from-paths src/my_bringup src/motor_driver_py src/realsense-ros \
        --skip-keys "slam_toolbox \
                     turtlebot3_gazebo \
                     gazebo_ros_pkgs \
