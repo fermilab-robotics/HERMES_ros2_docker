@@ -5,7 +5,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # COPY config/ /site_config/
-
+# TODO: Remove the rm -rf lines?
 # Create a non-root user. Note that the username is different from host!
 ARG USERNAME=ros
 ARG USER_UID=1000
@@ -32,6 +32,21 @@ RUN apt-get update \
 RUN apt-get update \
     && apt-get install -y ros-lyrical-demo-nodes-cpp \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Cyclone DDS and networking debug tools (ping, ip)
+RUN apt-get update \
+    && apt-get install -y ros-lyrical-rmw-cyclonedds-cpp \
+    iproute2 \
+    iputils-ping \
+    && rm -rf /var/lib/apt/lists/*
+
+
+# Tell ROS 2 to use Cyclone as the default middleware
+ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+
+# Force Cyclone to Wi-Fi using modern syntax
+# Hardcoded to point directly at the Laptop
+ENV CYCLONEDDS_URI='<CycloneDDS><Domain><General><Interfaces><NetworkInterface name="wlan0"/></Interfaces></General><Discovery><Peers><Peer address="10.42.0.1"/></Peers></Discovery></Domain></CycloneDDS>'
 
 COPY entrypoint.sh /entrypoint.sh
 # If we were using a base image, we would you the locale setting as well.
