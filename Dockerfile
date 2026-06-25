@@ -62,8 +62,7 @@ RUN rosdep init || true \
 
 # Install dependencies based on the package.xml files in the copied src/ folder
 RUN apt-get update \
-    && rosdep install -y --ignore-src -r \
-        --from-paths src/teleop_twist_keyboard \
+    && rosdep install -y --ignore-src -r --from-paths src -r \
        --skip-keys "slam_toolbox \
                     turtlebot3_gazebo \
                     gazebo_ros_pkgs \
