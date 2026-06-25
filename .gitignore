@@ -1,0 +1,74 @@
+# ==========================================
+# ROS 2 (colcon) Build Artifacts
+# ==========================================
+build/
+install/
+log/
+
+# Legacy Catkin artifacts (if workspace is shared)
+devel/
+.catkin_workspace
+
+# ==========================================
+# C++ / CMake Generated Files
+# ==========================================
+# If tracking individual packages instead of the full workspace root
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+*.cmake
+
+# ==========================================
+# Python Compiled Artifacts
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+.env
+.venv
+env/
+venv/
+
+# ==========================================
+# ROS Bag Records & Evaluation Data
+# ==========================================
+*.bag
+*.db3
+*.metadata.yaml
+recordings/
+output_data/
+
+# ==========================================
+# Code Quality & Formatting Caches
+# ==========================================
+.ament_clang_format
+.ament_clang_tidy
+.ament_uncrustify
+.clang-format
+.colcon/
+.mypy_cache/
+.pytest_cache/
+
+# ==========================================
+# IDE & System Files (Recommended Global)
+# ==========================================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -3,6 +3,7 @@ services:
     build:
       # Explain this line:
       context: .
+      dockerfile: Dockerfile.arm64 # specify 
       args:
         # Must match the Dockerfile
         USERNAME: ros
