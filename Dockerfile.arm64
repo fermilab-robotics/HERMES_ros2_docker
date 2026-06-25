@@ -48,6 +48,29 @@ ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 # Hardcoded to point directly at the Laptop
 ENV CYCLONEDDS_URI='<CycloneDDS><Domain><General><Interfaces><NetworkInterface name="wlan0"/></Interfaces></General><Discovery><Peers><Peer address="10.42.0.1"/></Peers></Discovery></Domain></CycloneDDS>'
 
+# --- ADD THIS BLOCK FOR ROSDEP ---
+WORKDIR /home/ros/ws
+
+# Copy your host's 'source' folder into the container's 'src' folder for the build phase
+COPY ./source ./src
+
+# Initialize and update rosdep
+RUN rosdep init || true \
+    && rosdep update
+
+# Install dependencies based on the package.xml files in the copied src/ folder
+RUN apt-get update \
+    && rosdep install -y --ignore-src --from-paths src -r \
+       --skip-keys "slam_toolbox \
+                    turtlebot3_gazebo \
+                    gazebo_ros_pkgs \
+                    ros_gz \
+                    ros_gz_sim \
+                    ros_gz_bridge \
+                    rviz2" \
+    && rm -rf /var/lib/apt/lists/*
+# ---------------------------------
+
 COPY entrypoint.sh /entrypoint.sh
 # If we were using a base image, we would you the locale setting as well.
 
