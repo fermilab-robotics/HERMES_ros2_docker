@@ -24,7 +24,10 @@ services:
       - ROS_DOMAIN_ID=42
       - ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
       - DISPLAY=${DISPLAY:-:0}
-
+      # Prevent Qt shared memory errors in Docker
+      - QT_X11_NO_MITSHM=1
+      # Forces X11 rendering for RViz2
+      - QT_QPA_PLATFORM=xcb
     volumes:
       # Named volume keeps build, install, and log files cached and fast
       - workspace_cache:/home/ros/ws
@@ -36,6 +39,8 @@ services:
       # For devices
       # Device cgroup rule (string that has the device type 'c for character', major id 13 for all inputdevicse, then minor id (* for all))
       - /dev:/dev
+      # Pass the thinkpad's GPU/intel graphics
+      - /dev/dri:/dev/dri
     
     device_cgroup_rules:
       - 'c *:* rmw'

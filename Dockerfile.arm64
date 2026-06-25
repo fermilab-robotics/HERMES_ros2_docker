@@ -81,7 +81,11 @@ RUN apt-get update \
                     ros_gz \
                     ros_gz_sim \
                     ros_gz_bridge \
-                    rviz2" \
+                    rviz2 \
+                    teleop_twist_keyboard \
+                    teleop_twist_joy \
+                    python3-gpiozero \
+                    python3-lgpio" \
     && rm -rf /var/lib/apt/lists/*
 # ---------------------------------
 
