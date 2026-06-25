@@ -27,7 +27,19 @@ RUN apt-get update \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
     && rm -rf /var/lib/apt/lists/*
+    
+# Install Cyclone DDS
+RUN apt-get update \
+    && apt-get install -y ros-lyrical-rmw-cyclonedds-cpp \
+    iproute2 \
+    iputils-ping \
+    && rm -rf /var/lib/apt/lists/*
 
+# Tell ROS 2 to use Cyclone as the default middleware
+ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+
+## Hardcoded to point directly at the Pi
+ENV CYCLONEDDS_URI='<CycloneDDS><Domain><General><Interfaces><NetworkInterface name="wlp4s0"/></Interfaces></General><Discovery><Peers><Peer address="10.42.0.43"/></Peers></Discovery></Domain></CycloneDDS>'
 
 COPY entrypoint.sh /entrypoint.sh
 # If we were using a base image, we would you the locale setting as well.

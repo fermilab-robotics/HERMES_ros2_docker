@@ -1,0 +1,145 @@
+1782396074.493273 [42]   listener: config: Domain/General/MulticastRecvNetworkInterfaceAddresses/#text: preferred {}
+1782396074.493313 [42]   listener: config: Domain/General/AddrsetCosts/uc/#text: 2 {}
+1782396074.493321 [42]   listener: config: Domain/General/AddrsetCosts/mc/#text: 3 {}
+1782396074.493325 [42]   listener: config: Domain/General/AddrsetCosts/ssm/#text: 2 {}
+1782396074.493329 [42]   listener: config: Domain/General/AddrsetCosts/delivered/#text: -1 {}
+1782396074.493333 [42]   listener: config: Domain/General/AddrsetCosts/discarded/#text: 1 {}
+1782396074.493337 [42]   listener: config: Domain/General/AddrsetCosts/redundant_psmx/#text: 0 {}
+1782396074.493341 [42]   listener: config: Domain/General/ExternalNetworkAddress/#text: auto {}
+1782396074.493345 [42]   listener: config: Domain/General/ExternalNetworkMask/#text: 0.0.0.0 {}
+1782396074.493351 [42]   listener: config: Domain/General/AllowMulticast/#text: false {0}
+1782396074.493355 [42]   listener: config: Domain/General/MulticastTimeToLive/#text: 32 {}
+1782396074.493359 [42]   listener: config: Domain/General/DontRoute/#text: false {}
+1782396074.493363 [42]   listener: config: Domain/General/Transport/#text: udp {}
+1782396074.493367 [42]   listener: config: Domain/General/EnableMulticastLoopback/#text: true {}
+1782396074.493372 [42]   listener: config: Domain/General/MaxMessageSize/#text: 14720 B {}
+1782396074.493379 [42]   listener: config: Domain/General/MaxRexmitMessageSize/#text: 1456 B {}
+1782396074.493383 [42]   listener: config: Domain/General/FragmentSize/#text: 1344 B {}
+1782396074.493387 [42]   listener: config: Domain/General/RedundantNetworking/#text: false {}
+1782396074.493392 [42]   listener: config: Domain/General/EntityAutoNaming/#text: empty {}
+1782396074.493399 [42]   listener: config: Domain/General/EntityAutoNaming[@seed]: 3958195320 1120935921 139652953 260333321 250065716 2621067288 522377918 1384615001 {}
+1782396074.493406 [42]   listener: config: Domain/Sizing/ReceiveBufferSize/#text: 1 MiB {}
+1782396074.493412 [42]   listener: config: Domain/Sizing/ReceiveBufferChunkSize/#text: 128 KiB {}
+1782396074.493417 [42]   listener: config: Domain/Compatibility/StandardsConformance/#text: lax {}
+1782396074.493423 [42]   listener: config: Domain/Compatibility/ExplicitlyPublishQosSetToDefault/#text: false {}
+1782396074.493428 [42]   listener: config: Domain/Compatibility/ManySocketsMode/#text: single {}
+1782396074.493434 [42]   listener: config: Domain/Compatibility/AssumeRtiHasPmdEndpoints/#text: false {}
+1782396074.493439 [42]   listener: config: Domain/Compatibility/ProtocolVersion/#text: 2.5 {}
+1782396074.493445 [42]   listener: config: Domain/Compatibility/AllowInvalidTryConstruct/#text: false {}
+1782396074.493449 [42]   listener: config: Domain/Compatibility/IgnoreTypeInformation/#text:  {}
+1782396074.493455 [42]   listener: config: Domain/Discovery/Tag/#text:  {}
+1782396074.493460 [42]   listener: config: Domain/Discovery/ExternalDomainId/#text: 42 {}
+1782396074.493466 [42]   listener: config: Domain/Discovery/DSGracePeriod/#text: 30 s {}
+1782396074.493471 [42]   listener: config: Domain/Discovery/Peers/Peer[@Address]: localhost {0}
+1782396074.493478 [42]   listener: config: Domain/Discovery/Peers/Peer[@PruneDelay]: default {}
+1782396074.493483 [42]   listener: config: Domain/Discovery/Peers[@AddLocalhost]: default {}
+1782396074.493488 [42]   listener: config: Domain/Discovery/ParticipantIndex/#text: auto {0}
+1782396074.493493 [42]   listener: config: Domain/Discovery/MaxAutoParticipantIndex/#text: 32 {0}
+1782396074.493499 [42]   listener: config: Domain/Discovery/SPDPMulticastAddress/#text: 239.255.0.1 {}
+1782396074.493503 [42]   listener: config: Domain/Discovery/SPDPInterval/#text: default {}
+1782396074.493509 [42]   listener: config: Domain/Discovery/DefaultMulticastAddress/#text: auto {}
+1782396074.493514 [42]   listener: config: Domain/Discovery/InitialLocatorPruneDelay/#text: 30 s {}
+1782396074.493520 [42]   listener: config: Domain/Discovery/DiscoveredLocatorPruneDelay/#text: 1 min {}
+1782396074.493525 [42]   listener: config: Domain/Discovery/Ports/Base/#text: 7400 {}
+1782396074.493539 [42]   listener: config: Domain/Discovery/Ports/DomainGain/#text: 250 {}
+1782396074.493545 [42]   listener: config: Domain/Discovery/Ports/ParticipantGain/#text: 2 {}
+1782396074.493550 [42]   listener: config: Domain/Discovery/Ports/MulticastMetaOffset/#text: 0 {}
+1782396074.493556 [42]   listener: config: Domain/Discovery/Ports/UnicastMetaOffset/#text: 10 {}
+1782396074.493561 [42]   listener: config: Domain/Discovery/Ports/MulticastDataOffset/#text: 1 {}
+1782396074.493566 [42]   listener: config: Domain/Discovery/Ports/UnicastDataOffset/#text: 11 {}
+1782396074.493571 [42]   listener: config: Domain/Discovery/EnableTopicDiscoveryEndpoints/#text: false {}
+1782396074.493577 [42]   listener: config: Domain/Discovery/LeaseDuration/#text: 10 s {}
+1782396074.493589 [42]   listener: config: Domain/Tracing/Category/#text: fatal,error,warning,info,config {1}
+1782396074.493596 [42]   listener: config: Domain/Tracing/OutputFile/#text: cyclonedds.log {}
+1782396074.493600 [42]   listener: config: Domain/Tracing/AppendToFile/#text: false {}
+1782396074.493618 [42]   listener: config: Domain/Tracing/PacketCaptureFile/#text:  {}
+1782396074.493623 [42]   listener: config: Domain/Internal/DeliveryQueueMaxSamples/#text: 256 {}
+1782396074.493627 [42]   listener: config: Domain/Internal/PrimaryReorderMaxSamples/#text: 128 {}
+1782396074.493633 [42]   listener: config: Domain/Internal/SecondaryReorderMaxSamples/#text: 128 {}
+1782396074.493638 [42]   listener: config: Domain/Internal/DefragUnreliableMaxSamples/#text: 4 {}
+1782396074.493666 [42]   listener: config: Domain/Internal/DefragReliableMaxSamples/#text: 16 {}
+1782396074.493671 [42]   listener: config: Domain/Internal/BuiltinEndpointSet/#text: writers {}
+1782396074.493676 [42]   listener: config: Domain/Internal/MeasureHbToAckLatency/#text: false {}
+1782396074.493680 [42]   listener: config: Domain/Internal/SynchronousDeliveryPriorityThreshold/#text: 0 {}
+1782396074.493697 [42]   listener: config: Domain/Internal/SynchronousDeliveryLatencyBound/#text: inf {}
+1782396074.493701 [42]   listener: config: Domain/Internal/MaxParticipants/#text: 0 {}
+1782396074.493706 [42]   listener: config: Domain/Internal/AccelerateRexmitBlockSize/#text: 0 {}
+1782396074.493710 [42]   listener: config: Domain/Internal/RetransmitMerging/#text: never {}
+1782396074.493733 [42]   listener: config: Domain/Internal/RetransmitMergingPeriod/#text: 5 ms {}
+1782396074.493739 [42]   listener: config: Domain/Internal/HeartbeatInterval/#text: 100 ms {}
+1782396074.493745 [42]   listener: config: Domain/Internal/HeartbeatInterval[@min]: 5 ms {}
+1782396074.493750 [42]   listener: config: Domain/Internal/HeartbeatInterval[@minsched]: 20 ms {}
+1782396074.493771 [42]   listener: config: Domain/Internal/HeartbeatInterval[@max]: 8 s {}
+1782396074.493776 [42]   listener: config: Domain/Internal/MaxQueuedRexmitBytes/#text: 512 KiB {}
+1782396074.493782 [42]   listener: config: Domain/Internal/MaxQueuedRexmitMessages/#text: 200 {}
+1782396074.493787 [42]   listener: config: Domain/Internal/WriterLingerDuration/#text: 1 s {}
+1782396074.493793 [42]   listener: config: Domain/Internal/SocketReceiveBufferSize[@min]: default {}
+1782396074.493798 [42]   listener: config: Domain/Internal/SocketReceiveBufferSize[@max]: default {}
+1782396074.493805 [42]   listener: config: Domain/Internal/SocketSendBufferSize[@min]: 64 KiB {}
+1782396074.493809 [42]   listener: config: Domain/Internal/SocketSendBufferSize[@max]: default {}
+1782396074.493816 [42]   listener: config: Domain/Internal/NackDelay/#text: 100 ms {}
+1782396074.493820 [42]   listener: config: Domain/Internal/AckDelay/#text: 10 ms {}
+1782396074.493827 [42]   listener: config: Domain/Internal/AutoReschedNackDelay/#text: 3 s {}
+1782396074.493831 [42]   listener: config: Domain/Internal/PreEmptiveAckDelay/#text: 10 ms {}
+1782396074.493837 [42]   listener: config: Domain/Internal/SquashParticipants/#text: false {}
+1782396074.493842 [42]   listener: config: Domain/Internal/SPDPResponseMaxDelay/#text: 0 s {}
+1782396074.493847 [42]   listener: config: Domain/Internal/LateAckMode/#text: false {}
+1782396074.493858 [42]   listener: config: Domain/Internal/RetryOnRejectBestEffort/#text: false {}
+1782396074.493864 [42]   listener: config: Domain/Internal/GenerateKeyhash/#text: false {}
+1782396074.493870 [42]   listener: config: Domain/Internal/MaxSampleSize/#text: 2147483647 B {}
+1782396074.493875 [42]   listener: config: Domain/Internal/LivelinessMonitoring/#text: false {}
+1782396074.493881 [42]   listener: config: Domain/Internal/LivelinessMonitoring[@StackTraces]: true {}
+1782396074.493886 [42]   listener: config: Domain/Internal/LivelinessMonitoring[@Interval]: 1 s {}
+1782396074.493892 [42]   listener: config: Domain/Internal/MonitorPort/#text: -1 {}
+1782396074.493897 [42]   listener: config: Domain/Internal/PrioritizeRetransmit/#text: true {}
+1782396074.493902 [42]   listener: config: Domain/Internal/UseMulticastIfMreqn/#text: 0 {}
+1782396074.493908 [42]   listener: config: Domain/Internal/RediscoveryBlacklistDuration/#text: 0 s {}
+1782396074.493913 [42]   listener: config: Domain/Internal/RediscoveryBlacklistDuration[@enforce]: false {}
+1782396074.493919 [42]   listener: config: Domain/Internal/MultipleReceiveThreads/#text: default {}
+1782396074.493924 [42]   listener: config: Domain/Internal/MultipleReceiveThreads[@maxretries]: 4294967295 {}
+1782396074.493930 [42]   listener: config: Domain/Internal/Test/XmitLossiness/#text: 0 {}
+1782396074.493936 [42]   listener: config: Domain/Internal/Watermarks/WhcLow/#text: 1 KiB {}
+1782396074.493942 [42]   listener: config: Domain/Internal/Watermarks/WhcHigh/#text: 500 KiB {}
+1782396074.493947 [42]   listener: config: Domain/Internal/Watermarks/WhcHighInit/#text: 30 KiB {}
+1782396074.493953 [42]   listener: config: Domain/Internal/Watermarks/WhcAdaptive/#text: true {}
+1782396074.493958 [42]   listener: config: Domain/Internal/BurstSize/MaxRexmit/#text: 1 MiB {}
+1782396074.493964 [42]   listener: config: Domain/Internal/BurstSize/MaxInitTransmit/#text: 4294967295 {}
+1782396074.493969 [42]   listener: config: Domain/Internal/BurstSize/MaxFragsRexmitSample/#text: 1 {}
+1782396074.493975 [42]   listener: config: Domain/Internal/ExtendedPacketInfo/#text: default {}
+1782396074.493980 [42]   listener: config: Domain/Internal/EnableExpensiveChecks/#text:  {}
+1782396074.493986 [42]   listener: config: Domain/SSL/Enable/#text: false {}
+1782396074.493991 [42]   listener: config: Domain/SSL/CertificateVerification/#text: true {}
+1782396074.493997 [42]   listener: config: Domain/SSL/VerifyClient/#text: true {}
+1782396074.494001 [42]   listener: config: Domain/SSL/SelfSignedCertificates/#text: false {}
+1782396074.494007 [42]   listener: config: Domain/SSL/KeystoreFile/#text: keystore {}
+1782396074.494012 [42]   listener: config: Domain/SSL/KeyPassphrase/#text: secret {}
+1782396074.494018 [42]   listener: config: Domain/SSL/Ciphers/#text: ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH {}
+1782396074.494022 [42]   listener: config: Domain/SSL/EntropyFile/#text:  {}
+1782396074.494027 [42]   listener: config: Domain/SSL/MinimumTLSVersion/#text: 1.3 {}
+1782396074.494033 [42]   listener: config: Domain[@Id]: 42 {}
+1782396074.494120 [42]   listener: started at 1782396074.06494049 -- 2026-06-25 14:01:14+00:00
+1782396074.494128 [42]   listener: Version: CycloneDDS 11.0.1  
+1782396074.494133 [42]   listener: udp initialized
+1782396074.494489 [42]   listener: interfaces: lo udp/127.0.0.1(q1) enp0s25 udp/131.225.129.110(q9) wlp4s0 udp/10.42.0.1(q9) docker0 udp/172.17.0.1(q9)
+1782396074.494501 [42]   listener: using network interface enp0s25 (udp/131.225.129.110) selected arbitrarily from: enp0s25, wlp4s0, docker0
+1782396074.494530 [42]   listener: selected interfaces: enp0s25 (index 2 priority 0 mc {})
+1782396074.494534 [42]   listener: addrset costs:
+1782396074.494538 [42]   listener:   enp0s25: uc 2 mc 3 ssm 2 delivered -1 discarded 1 redundant_psmx 0
+1782396074.494556 [42]   listener: ownip: udp/131.225.129.110
+1782396074.494563 [42]   listener: extmask: invalid/0 (not applicable)
+1782396074.494568 [42]   listener: SPDP MC: udp/239.255.0.1
+1782396074.494572 [42]   listener: default MC: udp/239.255.0.1
+1782396074.494582 [42]   listener: SSM support included
+1782396074.494763 [42]   listener: rtps_init: trying to find a free participant index
+1782396074.494803 [42]   listener: socket receive buffer size set to 2097152 bytes
+1782396074.494823 [42]   listener: socket receive buffer size set to 2097152 bytes
+1782396074.494832 [42]   listener: rtps_init: uc ports: disc 17910 data 17911
+1782396074.494835 [42]   listener: rtps_init: domainid 42 participantid 1
+1782396074.494838 [42]   listener: Unicast Ports: discovery 17910 data 17911
+1782396074.494846 [42]   listener: socket receive buffer size set to 2097152 bytes
+1782396074.494855 [42]   listener: interface enp0s25: transmit port 58612
+1782396074.495005 [42]   listener: add_peer_address: add udp/127.0.0.1:17910 ... :17974 (prune delay 30000000000)
+1782396074.495012 [42]   listener: adding self (udp/131.225.129.110)
+1782396074.495040 [42]   listener: add_peer_address: add udp/131.225.129.110:17910 ... :17974 (prune delay 30000000000)
+1782396213.976514 [42]   listener: udp finalized
+1782396213.979473 [42]   listener: Finis.
