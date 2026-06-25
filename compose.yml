@@ -32,6 +32,13 @@ services:
       - ./source:/home/ros/ws/src
       # X11 socket for RViz windows
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
+
+      # For devices
+      # Device cgroup rule (string that has the device type 'c for character', major id 13 for all inputdevicse, then minor id (* for all))
+      - /dev:/dev
+    
+    device_cgroup_rules:
+      - 'c *:* rmw'
     
     command: /bin/bash
 

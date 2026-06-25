@@ -27,6 +27,14 @@ RUN apt-get update \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
     && rm -rf /var/lib/apt/lists/*
+
+# Program for testing joystick devices
+RUN apt-get update \
+    && apt-get install -y \
+    evtest \
+    jstest-gtk \
+    python3-serial \
+    && rm -rf /var/lib/apt/lists/*
     
 # Install Cyclone DDS
 RUN apt-get update \
