@@ -28,6 +28,17 @@ RUN apt-get update \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
     && rm -rf /var/lib/apt/lists/*
 
+# Add pip and lgpio to Pi Dockerfile
+RUN apt-get update && apt-get install -y \
+    python3-pip \
+    swig \
+    python3-dev \
+    build-essential \
+    liblgpio-dev \
+    # Break system packages required for global install
+    && pip3 install gpiozero lgpio --break-system-packages \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install demo_nodes for testing
 RUN apt-get update \
     && apt-get install -y ros-lyrical-demo-nodes-cpp \
@@ -46,7 +57,8 @@ ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
 # Force Cyclone to Wi-Fi using modern syntax
 # Hardcoded to point directly at the Laptop
-ENV CYCLONEDDS_URI='<CycloneDDS><Domain><General><Interfaces><NetworkInterface name="wlan0"/></Interfaces></General><Discovery><Peers><Peer address="10.42.0.1"/></Peers></Discovery></Domain></CycloneDDS>'
+COPY cyclonedds_pi.xml /cyclonedds.xml
+ENV CYCLONEDDS_URI="file://cyclonedds.xml"
 
 # --- ADD THIS BLOCK FOR ROSDEP ---
 WORKDIR /home/ros/ws
@@ -60,7 +72,9 @@ RUN rosdep init || true \
 
 # Install dependencies based on the package.xml files in the copied src/ folder
 RUN apt-get update \
-    && rosdep install -y --ignore-src --from-paths src -r \
+    && rosdep install -y --ignore-src -r \
+    # Only install from those that are needed for server
+        --from-paths src/my_bringup src/motor_driver_py \
        --skip-keys "slam_toolbox \
                     turtlebot3_gazebo \
                     gazebo_ros_pkgs \

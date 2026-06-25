@@ -47,7 +47,8 @@ RUN apt-get update \
 ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
 ## Hardcoded to point directly at the Pi
-ENV CYCLONEDDS_URI='<CycloneDDS><Domain><General><Interfaces><NetworkInterface name="wlp4s0"/></Interfaces></General><Discovery><Peers><Peer address="10.42.0.43"/></Peers></Discovery></Domain></CycloneDDS>'
+COPY cyclonedds_laptop.xml /cyclonedds.xml
+ENV CYCLONEDDS_URI="file:///cyclonedds.xml"
 
 # --- ADD THIS BLOCK FOR ROSDEP ---
 WORKDIR /home/ros/ws
@@ -61,7 +62,8 @@ RUN rosdep init || true \
 
 # Install dependencies based on the package.xml files in the copied src/ folder
 RUN apt-get update \
-    && rosdep install -y --ignore-src --from-paths src -r \
+    && rosdep install -y --ignore-src -r \
+        --from-paths src/teleop_twist_keyboard \
        --skip-keys "slam_toolbox \
                     turtlebot3_gazebo \
                     gazebo_ros_pkgs \

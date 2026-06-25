@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CycloneDDS>
+    <Domain>
+        <General>
+            <AllowMulticast>false</AllowMulticast>
+            <Interfaces>
+                <!-- Pi's Wi-Fi interface -->
+                <NetworkInterface name="wlan0"/>
+            </Interfaces>
+        </General>
+        <Discovery>
+            <Peers>
+                <!-- Point to the Laptop's Hotspot IP -->
+                <Peer address="10.42.0.1"/>
+            </Peers>
+        </Discovery>
+    </Domain>
+</CycloneDDS>
