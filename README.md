@@ -73,3 +73,4 @@ Run `docker builder prune -a -f` on the pi to clear the disk  from time-to-time
 - Add these issues to github issues so I can triage them
 - Cleanup documentation with AI tool
 - Fix DATE issues! for good! 
+- Fix controller dockefile too

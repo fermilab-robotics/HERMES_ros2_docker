@@ -10,7 +10,7 @@
         </General>
         <Discovery>
             <Peers>
-                <!-- Point to the Laptop's Hotspot IP -->
+                <!-- Point to the Client's Hotspot IP -->
                 <Peer address="10.42.0.1"/>
             </Peers>
         </Discovery>

@@ -10,7 +10,7 @@
         </General>
         <Discovery>
             <Peers>
-                <!-- Point to the Pi's IP -->
+                <!-- Point to the Server's IP -->
                 <Peer address="10.42.0.43"/>
             </Peers>
         </Discovery>
