@@ -153,7 +153,7 @@ else()
   set(SENSOR_MSGS_TARGET ${sensor_msgs_LIBRARIES})
 endif()
 
-find_package(realsense2 2.58.0)
+find_package(realsense2 2.57.7)
 if (BUILD_ACCELERATE_GPU_WITH_GLSL)
   find_package(realsense2-gl 2.58.0)
 endif()
