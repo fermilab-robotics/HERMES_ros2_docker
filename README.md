@@ -72,3 +72,4 @@ Run `docker builder prune -a -f` on the pi to clear the disk  from time-to-time
 - Fix permission issues when running `colcon build`
 - Add these issues to github issues so I can triage them
 - Cleanup documentation with AI tool
+- Fix DATE issues! for good! 

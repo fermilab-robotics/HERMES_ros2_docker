@@ -32,3 +32,6 @@ Source the installation files:
 
 Now run the launch script:
 `ros2 launch my_bringup server_launch.py`
+
+To launch camera:
+`ros2 run realsense2_camera realsense2_camera_node`
