@@ -79,4 +79,4 @@ On Github, click your profile picture, Settings/Developer Settings / Generate Ne
 cd into the directory:
 `cd HERMES_ros2_docker`
 
-Success! Now go to [build_pi](./build_pi.md) to build the project!
+Success! Now go to [build_robot](./build_robot.md) to build the project!

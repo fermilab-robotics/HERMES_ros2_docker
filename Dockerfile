@@ -55,6 +55,9 @@ WORKDIR /home/ros/ws
 # Copy over repository source to get overall dependencies
 COPY ./source ./src
 
+# Ensure the copied source code is also owned by ros
+RUN chown -R ros:ros /home/ros/ws
+
 COPY entrypoint.sh /entrypoint.sh
 
 # Entrypoint script and launch bash

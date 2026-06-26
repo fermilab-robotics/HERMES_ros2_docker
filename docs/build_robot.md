@@ -7,7 +7,8 @@ Run:
 `docker compose up robot -d`
 
 
-
+To check failure logs:
+docker compose logs robot
 
 
 
