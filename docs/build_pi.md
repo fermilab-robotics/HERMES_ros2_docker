@@ -1,4 +1,16 @@
 
+# QUICKSTART
+
+Ensure the Pi is connected to the internet.
+Run:
+`docker compose build robot`
+`docker compose up robot -d`
+
+
+
+
+
+
 Build the environment:
 `docker compose -f compose.arm64.yml up -d`
 
