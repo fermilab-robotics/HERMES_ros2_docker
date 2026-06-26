@@ -1,15 +1,20 @@
-FROM osrf/ros:lyrical-desktop-full
+# ============ BASE PACKAGE ===============
 
+FROM ros:lyrical-ros-base AS base
+
+# Core tools and middleware
 RUN apt-get update \
     && apt-get install -y nano \
+    ros-lyrical-rmw-cyclonedds-cpp \
+    python3-vcstool \
     && rm -rf /var/lib/apt/lists/*
-
-COPY config/ /site_config/
 
 # Create a non-root user. Note that the username is different from host!
 ARG USERNAME=ros
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
+
+
 
 # Delete user if it exists in container (e.g Ubuntu Noble: ubuntu)
 RUN if id -u $USER_UID ; then userdel `id -un $USER_UID` ; fi
@@ -28,53 +33,104 @@ RUN apt-get update \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
     && rm -rf /var/lib/apt/lists/*
 
+RUN rosdep init || true \
+    && rosdep update \
+
+# Configurations
+COPY config/ /site_config/
+
+# DDS config
+COPY cyclonedds.xml /cyclonedds.xml
+ENV CYCLONEDDS_URI="file:///cyclonedds.xml"
+
+# Set environment variables
+# Tell ROS 2 to use Cyclone as the default middleware
+ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+
+# Source the ROS2 environment 
+RUN echo "source /opt/ros/lyrical/setup.bash" >> /home/ros/.bashrc
+
+WORKDIR /home/ros/ws
+
+# Copy over repository source to get overall dependencies
+COPY ./source ./src
+
+COPY entrypoint.sh /entrypoint.sh
+
+# Entrypoint script and launch bash
+ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
+CMD ["/bin/bash"]
+
+
+# ================== Controller (Display node) ================ #
+
+FROM base as controller
+
+# rosdep scans code
+RUN apt-get update \
+    && rosdep install -y --ignore-src --from-paths src \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install the Telemetry and joystick diagnostic tools
 # Program for testing joystick devices
 RUN apt-get update \
     && apt-get install -y \
     evtest \
     jstest-gtk \
     python3-serial \
+    ros-lyrical-image-view \
+    ros-lyrical-teleop_twist_keyboard \
+    && rm -rf /var/lib/apt/lists/*
+
+USER $USERNAME
+
+
+# ================== Laptop (Display node) ================ #
+
+FROM base as laptop
+
+# rosdep scans code
+RUN apt-get update \
+    && rosdep install -y --ignore-src --from-paths src \
     && rm -rf /var/lib/apt/lists/*
     
-# Install Cyclone DDS
+# Install the Telemetry and joystick diagnostic tools
+# Program for testing joystick devices
 RUN apt-get update \
-    && apt-get install -y ros-lyrical-rmw-cyclonedds-cpp \
-    iproute2 \
-    iputils-ping \
+    && apt-get install -y \
+    evtest \
+    jstest-gtk \
+    python3-serial \
+    ros-lyrical-image-view \
+    ros-lyrical-teleop_twist_keyboard \
     && rm -rf /var/lib/apt/lists/*
 
-# Tell ROS 2 to use Cyclone as the default middleware
-ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+USER $USERNAME
 
-## Hardcoded to point directly at the Pi
-COPY cyclonedds_laptop.xml /cyclonedds.xml
-ENV CYCLONEDDS_URI="file:///cyclonedds.xml"
 
-# --- ADD THIS BLOCK FOR ROSDEP ---
-WORKDIR /home/ros/ws
+# ================== ROBOT ====================== #
+FROM base AS robot
 
-# Copy your host's 'source' folder into the container's 'src' folder for the build phase
-COPY ./source ./src
+# Use vcstool to clone hardware repos into src/
 
-# Initialize and update rosdep
-RUN rosdep init || true \
-    && rosdep update
 
-# Install dependencies based on the package.xml files in the copied src/ folder
+# Copy the hardware manifest into the container
+COPY hardware.repos /tmp/hardware.repos
+
+# Use vcstool to dynamically clone the hardware repos into src/
+RUN vcs import src < /tmp/hardware.repos
+
+
 RUN apt-get update \
-    && rosdep install -y --ignore-src -r --from-paths src -r \
+    && rosdep install -y --ignore-src --from-paths src \
     && rm -rf /var/lib/apt/lists/*
-# ---------------------------------
 
-COPY entrypoint.sh /entrypoint.sh
-# If we were using a base image, we would you the locale setting as well.
+# Install hardware interface libraries
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    liblgpio-dev \
+    python3-pip \
+    && pip3 install gpiozero lgpio --break-system-packages \
+    && rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
-CMD ["/bin/bash"]
-
-
-# Source the ROS2 environment (Not working right now)
-RUN echo "source /opt/ros/lyrical/setup.bash" >> /home/ros/.bashrc
-
-# Set the default user. Omit if we want to keep the default as root
-# USER $USERNAME
+USER $USERNAME

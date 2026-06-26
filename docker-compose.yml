@@ -1,0 +1,165 @@
+services:
+  # Target 1: Laptop
+  laptop:
+    build:
+      # Explain this line:
+      context: .
+      args:
+        # Must match the Dockerfile
+        USERNAME: ros
+        USER_UID: 1000
+        USER_GID: 1000
+
+      # Which dockerfile section to use
+      target: laptop
+
+
+    image: ros2-lyrical-laptop:latest
+    # GUI and permission
+    network_mode: host 
+    ipc: host
+    pid: host
+    stdin_open: true
+    tty: true
+    # Placed inside the user's home directory
+    working_dir: /home/ros/ws
+    user: ros
+
+    environment:
+      - ROS_DOMAIN_ID=42
+      - DISPLAY=${DISPLAY:-:0}
+      # Prevent Qt shared memory errors in Docker
+      - QT_X11_NO_MITSHM=1
+      # Forces X11 rendering for RViz2
+      - QT_QPA_PLATFORM=xcb
+    volumes:
+      # Named volume keeps build, install, and log files cached and fast
+      - workspace_cache:/home/ros/ws
+      # My live code source maps on top
+      - ./source:/home/ros/ws/src
+      # X11 socket for RViz windows
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+
+      # For devices
+      # Device cgroup rule (string that has the device type 'c for character', major id 13 for all inputdevicse, then minor id (* for all))
+      - /dev:/dev
+      # Pass the thinkpad's GPU/intel graphics
+      - /dev/dri:/dev/dri
+    
+    device_cgroup_rules:
+      - 'c *:* rmw'
+    
+    command: /bin/bash
+
+  # Target 2: Controller
+  controller:
+    build:
+      context: .
+      dockerfile: Dockerfile # specify 
+      args:
+        # Must match the Dockerfile
+        USERNAME: ros
+        USER_UID: 1000
+        USER_GID: 1000
+
+      # Which dockerfile section to use
+      target: controller
+
+      
+    image: ros2-lyrical-controller:latest
+    container_name: ros2-workspace
+    # GUI and permission
+    network_mode: host 
+    ipc: host
+    pid: host
+    stdin_open: true
+    privileged: true
+    tty: true
+    # Placed inside the user's home directory
+    working_dir: /home/ros/ws
+    user: ros
+
+    # For gpio access
+    group_add:
+      - "1000" #
+
+    environment:
+      - ROS_DOMAIN_ID=42
+      # Fix bug
+      - GPIOZERO_PIN_FACTORY=lgpio
+      - RPI_LGPIO_CHIP=0
+      - DISPLAY=${DISPLAY}
+
+    volumes:
+      # Named volume keeps build, install, and log files cached and fast
+      - controller_cache:/home/ros/ws
+      # My live code source maps on top
+      - ./source:/home/ros/ws/src
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      # map devices 
+      - /dev:/dev
+    
+    device_cgroup_rules:
+      - 'c *:* rmw'
+    
+    command: >
+      bash -c "colcon build --packages-up-to image_view teleop_twist_keyboard && 
+        source install/setup.bash &&
+        ros2 run image_view image_view --ros-args -p image:=/camera/camera/color/image_raw"
+
+
+
+  # Target 3: Robot
+  robot:
+    build:
+      # Explain this line:
+      context: .
+      args:
+        # Must match the Dockerfile
+        USERNAME: ros
+        USER_UID: 1000
+        USER_GID: 1000
+
+      target: robot
+
+    image: ros2-lyrical-robot:latest
+    # GUI and permission
+    network_mode: host 
+    ipc: host
+    pid: host
+    stdin_open: true
+    tty: true
+    # Placed inside the user's home directory
+    working_dir: /home/ros/ws
+    privileged: true
+    user: ros
+
+    environment:
+      - ROS_DOMAIN_ID=42
+      - GPIOZERO_PIN_FACTORY=lgpio
+      - RPI_LGPIO_CHIP=0
+      - DISPLAY=${DISPLAY:-:0}
+    volumes:
+      # Named volume keeps build, install, and log files cached and fast
+      - robot_cache:/home/ros/ws
+      # My live code source maps on top
+      - ./source:/home/ros/ws/src
+
+      # For devices
+      # Device cgroup rule (string that has the device type 'c for character', major id 13 for all inputdevicse, then minor id (* for all))
+      - /dev:/dev
+
+    device_cgroup_rules:
+      - 'c *:* rmw'
+    
+    # -c tells bash to execute from a string
+    command: >
+      bash -c "colcon build --packages-up-to my_bringup realsense-ros &&
+      source install/setup.bash &&
+      ros2 launch my_bringup server_launch.py"
+
+
+volumes:
+  laptop_cache:
+  controller_cache:
+  robot_cache:
