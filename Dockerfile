@@ -34,7 +34,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 RUN rosdep init || true \
-    && rosdep update \
+    && rosdep update
 
 # Configurations
 COPY config/ /site_config/
@@ -62,6 +62,7 @@ ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
 CMD ["/bin/bash"]
 
 
+# TODO: Createanother "FROM base as client" and base off the controller and laptop off that
 # ================== Controller (Display node) ================ #
 
 FROM base as controller
@@ -79,7 +80,7 @@ RUN apt-get update \
     jstest-gtk \
     python3-serial \
     ros-lyrical-image-view \
-    ros-lyrical-teleop_twist_keyboard \
+    ros-lyrical-teleop-twist-keyboard \
     && rm -rf /var/lib/apt/lists/*
 
 USER $USERNAME
@@ -102,7 +103,7 @@ RUN apt-get update \
     jstest-gtk \
     python3-serial \
     ros-lyrical-image-view \
-    ros-lyrical-teleop_twist_keyboard \
+    ros-lyrical-teleop-twist-keyboard \
     && rm -rf /var/lib/apt/lists/*
 
 USER $USERNAME

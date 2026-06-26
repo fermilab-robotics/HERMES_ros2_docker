@@ -34,7 +34,7 @@ services:
       - QT_QPA_PLATFORM=xcb
     volumes:
       # Named volume keeps build, install, and log files cached and fast
-      - workspace_cache:/home/ros/ws
+      - laptop_cache:/home/ros/ws
       # My live code source maps on top
       - ./source:/home/ros/ws/src
       # X11 socket for RViz windows

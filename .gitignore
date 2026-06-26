@@ -72,3 +72,7 @@ output_data/
 .idea/
 .DS_Store
 Thumbs.db
+
+
+# Third party packages
+source/realsense-ros/
