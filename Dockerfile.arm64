@@ -39,9 +39,11 @@ RUN apt-get update && apt-get install -y \
     && pip3 install gpiozero lgpio --break-system-packages \
     && rm -rf /var/lib/apt/lists/*
 
-# Install demo_nodes for testing
+# Install demo_nodes and graphical image viewer
 RUN apt-get update \
-    && apt-get install -y ros-lyrical-demo-nodes-cpp \
+    && apt-get install -y \
+    ros-lyrical-demo-nodes-cpp \
+    ros-lyrical-image-view \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Cyclone DDS and networking debug tools (ping, ip)
