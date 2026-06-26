@@ -1,7 +1,6 @@
 services:
   ros2:
     build:
-      # Explain this line:
       context: .
       dockerfile: Dockerfile.arm64 # specify 
       args:
