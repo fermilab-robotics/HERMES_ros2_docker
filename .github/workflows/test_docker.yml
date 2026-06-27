@@ -1,0 +1,20 @@
+name: Test Docker Builds
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Test Build 'laptop_dev' target
+        run: docker compose build laptop
+
+      - name: Test Build 'robot' target (Production)
+        run: docker compose build robot

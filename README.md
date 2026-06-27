@@ -1,3 +1,23 @@
+# Fermilab Robotics: Hermes ROS2 framework
+
+This is the repository of the Fermilab-Robotics Teleoperated stack. This stack is ROS2-based and tested on Ubuntu 26.04 LTS with ROS2 Lyrical.
+
+![Alt](doc/images/visual_abstract.png)
+
+The software stack is grouped in the following packages:
+
+A video showcasing the software on Hermes and RVR will be available soon.
+
+## System Architecture
+
+The system architecture is depicted in the following graphic:
+
+
+## Getting started
+
+[Getting Started](doc/getting_started.md)
+Information about the docker workspace:
+
 ## Laptop Setup
 Install Docker Engine:
 
@@ -16,14 +36,6 @@ docker compose up -d
 docker
 
 
-## Up-and-Running
-The steps to get the project up-and-running are:
-
-### Laptop:
-1. [Setup the controller device](/docs/installation_master.md)
-### Pi
-1. [Setup the Pi](/docs/installation_slave.md)
-2. [Build the project on the Pi](/docs/build_pi.md)
 
 
 
@@ -59,18 +71,3 @@ Run `docker builder prune -a -f` on the pi to clear the disk  from time-to-time
 
 ## Adding a new feature
 
-
-
-
-## Immediate upgrades:
-
-- Do not install all the `realsense_ros` packages, only the ones needed for image transport (dockerfile for arm64 takes eons to build right now)
-- realsense_ros should get 720p and 30fps across
-- Unify dockerfile into one file, having two compose's but only one dockerfile (look at althacks structure)
-    - Figure out how to only install what's needed in each dockerfile
-- Add camera to launch script
-- Fix permission issues when running `colcon build`
-- Add these issues to github issues so I can triage them
-- Cleanup documentation with AI tool
-- Fix DATE issues! for good! 
-- Fix controller dockefile too

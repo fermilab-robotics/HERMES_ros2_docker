@@ -1,6 +1,6 @@
 services:
-  # Target 1: Laptop
-  laptop:
+  # Laptop
+  laptop_dev:
     build:
       # Explain this line:
       context: .
@@ -11,10 +11,9 @@ services:
         USER_GID: 1000
 
       # Which dockerfile section to use
-      target: laptop
+      target: laptop_dev
 
-
-    image: ros2-lyrical-laptop:latest
+    image: ros2-lyrical-laptop_dev:latest
     # GUI and permission
     network_mode: host 
     ipc: host
@@ -32,11 +31,16 @@ services:
       - QT_X11_NO_MITSHM=1
       # Forces X11 rendering for RViz2
       - QT_QPA_PLATFORM=xcb
+
     volumes:
       # Named volume keeps build, install, and log files cached and fast
-      - laptop_cache:/home/ros/ws
+      - laptop_build:/home/ros/ws/build
+      - laptop_install:/home/ros/ws/install
+      - laptop_log:/home/ros/ws/log
+
       # My live code source maps on top
       - ./source:/home/ros/ws/src
+
       # X11 socket for RViz windows
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
 
@@ -108,8 +112,7 @@ services:
 
 
 
-  # Target 3: Robot
-  robot:
+  robot_prod:
     build:
       # Explain this line:
       context: .
@@ -119,9 +122,9 @@ services:
         USER_UID: 1000
         USER_GID: 1000
 
-      target: robot
+      target: robot_prod
 
-    image: ros2-lyrical-robot:latest
+    image: ros2-lyrical-robot_prod:latest
     # GUI and permission
     network_mode: host 
     ipc: host
@@ -139,10 +142,7 @@ services:
       - RPI_LGPIO_CHIP=0
       - DISPLAY=${DISPLAY:-:0}
     volumes:
-      # Named volume keeps build, install, and log files cached and fast
-      - robot_cache:/home/ros/ws
-      # My live code source maps on top
-      - ./source:/home/ros/ws/src
+      # No caches here, everything is built in the dockerfile
 
       # For devices
       # Device cgroup rule (string that has the device type 'c for character', major id 13 for all inputdevicse, then minor id (* for all))
@@ -152,13 +152,10 @@ services:
       - 'c *:* rmw'
     
     # -c tells bash to execute from a string
-    command: >
-      bash -c "colcon build --packages-up-to my_bringup realsense-ros &&
-      source install/setup.bash &&
-      ros2 launch my_bringup server_launch.py"
-
+    command: ["/bin/bash", "-c", "source /opt/ros/lyrical/setup.bash && ros2 launch my_bringup hermes_launch.py"]
 
 volumes:
-  laptop_cache:
+  laptop_build:
+  laptop_install:
+  laptop_log:
   controller_cache:
-  robot_cache:
