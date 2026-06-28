@@ -10,7 +10,16 @@ jobs:
   test-build:
     runs-on: ubuntu-latest
     steps:
-        # 1. Log into GitHub's built-in container registry
+        # 1. Download your code so the runner can see your root Dockerfile
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Convert repository name to lowercase for GitHub Registry
+      - name: Lowercase Repository Name
+        id: repo
+        run: echo "name=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+
+        # 3. Log into GitHub's built-in container registry
       - name: Log in to GitHub Container Registry (GHCR)
         uses: docker/login-action@v3
         with:
@@ -22,27 +31,15 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push docker image
+    # Build laptop_dev target
+      - name: Build 'laptop_dev' docker image
         uses: docker/build-push-action@v7
         with:
           context: .
+          file: ./Dockerfile
+          target: laptop_dev
           push: true
-          tags: user/app:latest
-          cache-from: type=registry,ref=user/app:buildcache
-          cache-to: type=registry,ref=user/app:buildcache,mode=max
-
-      - name: Test Build 'laptop_dev' target
-        # The -f flags merge your base compose with the GitHub caching rules
-        run: docker compose -f docker-compose.yml -f docker-compose.gh-cache.yml build laptop_dev
-        env:
-          BUILDX_NO_DEFAULT_LOAD: 1
-
-      - name: Test Build 'controller' target
-        run: docker compose -f docker-compose.yml -f docker-compose.gh-cache.yml build controller
-        env:
-          BUILDX_NO_DEFAULT_LOAD: 1
-
-      - name: Test Build 'robot' target (Production)
-        run: docker compose -f docker-compose.yml -f docker-compose.gh-cache.yml build robot_prod
-        env:
-          BUILDX_NO_DEFAULT_LOAD: 1
+          tags: ghcr.io//${{ steps.repo.outputs.name }}:laptop_dev
+          cache-from: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-laptop_dev
+          cache-to: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-laptop_dev,mode=max
+    
