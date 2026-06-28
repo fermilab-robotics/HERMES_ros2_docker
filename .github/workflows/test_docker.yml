@@ -42,4 +42,26 @@ jobs:
           tags: ghcr.io/${{ steps.repo.outputs.name }}:laptop_dev
           cache-from: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-laptop_dev
           cache-to: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-laptop_dev,mode=max
+
+      - name: Build 'controller' docker image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ./Dockerfile
+          target: controller
+          push: true
+          tags: ghcr.io/${{ steps.repo.outputs.name }}:controller
+          cache-from: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-controller
+          cache-to: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-controller,mode=max
+      
+      - name: Build 'robot_prod' docker image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ./Dockerfile
+          target: robot_prod
+          push: true
+          tags: ghcr.io/${{ steps.repo.outputs.name }}:robot_prod`
+          cache-from: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-robot_prod
+          cache-to: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-robot_prod,mode=max
     
