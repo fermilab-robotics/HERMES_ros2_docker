@@ -132,7 +132,8 @@ FROM base AS robot_prod
 COPY hardware.repos /tmp/hardware.repos
 
 # Use vcstool to dynamically clone the hardware repos into src/
-RUN vcs import src < /tmp/hardware.repos
+RUN mkdir -p src && vcs import src < /tmp/hardware.repos
+
 
 # Install hardware interface libraries
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -148,11 +149,11 @@ USER $USERNAME
 RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     --mount=type=cache,target=/home/ros/ws/build,uid=$USER_UID,gid=$USER_GID \
     --mount=type=cache,target=/home/ros/ws/log,uid=$USER_UID,gid=$USER_GID \
-    bash -c "source /opt/ros/${ROS_DISTRO}/setup.sh && colcon build --symlink-install"
+    bash -c "source /opt/ros/${ROS_DISTRO}/setup.sh && colcon build"
 
 # Source the workspace in bashrc
 RUN echo "source /home/${USERNAME}/ws/install/setup.bash" >> /home/${USERNAME}/.bashrc
 
 # Production command
-CMD ["ros2", "launch", "robot_bringup", "robot.launch.py"]
+CMD ["ros2", "launch", "robot_bringup", "server_launch.py"]
 

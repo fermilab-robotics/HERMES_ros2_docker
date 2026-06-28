@@ -16,5 +16,8 @@ jobs:
       - name: Test Build 'laptop_dev' target
         run: docker compose build laptop_dev
 
+      - name: Test Build 'controller' target
+        run: docker compose build controller
+
       - name: Test Build 'robot' target (Production)
         run: docker compose build robot_prod

@@ -152,7 +152,6 @@ services:
       - 'c *:* rmw'
     
     # -c tells bash to execute from a string
-    command: ["/bin/bash", "-c", "source /opt/ros/lyrical/setup.bash && ros2 launch my_bringup hermes_launch.py"]
 
 volumes:
   laptop_build:
