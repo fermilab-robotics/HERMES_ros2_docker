@@ -39,7 +39,7 @@ jobs:
           file: ./Dockerfile
           target: laptop_dev
           push: true
-          tags: ghcr.io//${{ steps.repo.outputs.name }}:laptop_dev
+          tags: ghcr.io/${{ steps.repo.outputs.name }}:laptop_dev
           cache-from: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-laptop_dev
           cache-to: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-laptop_dev,mode=max
     
