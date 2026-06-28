@@ -152,7 +152,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     liblgpio-dev \
     python3-lgpio \
     python3-gpiozero \
-    && pip3 install gpiozero lgpio --break-system-packages \
     && rm -rf /var/lib/apt/lists/*
 
 USER $USERNAME
