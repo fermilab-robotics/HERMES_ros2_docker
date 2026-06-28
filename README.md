@@ -71,3 +71,5 @@ Run `docker builder prune -a -f` on the pi to clear the disk  from time-to-time
 
 ## Adding a new feature
 
+
+## TODO: Add to docs - about CI/CD multiple targets

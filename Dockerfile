@@ -88,7 +88,7 @@ ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
 #--------------operator_base-----------------#
 ###########################################
 
-FROM base as operator_base
+FROM base AS operator_base
 
 # Install the Telemetry and joystick diagnostic tools
 # Program for testing joystick devices
@@ -107,7 +107,7 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     && rm -rf /var/lib/apt/lists/*
 
 # ================== Laptop_Dev (Development ================ #
-FROM operator_base as laptop_dev
+FROM operator_base AS laptop_dev
 
 # Install dev-specific tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -125,7 +125,7 @@ CMD ["/bin/bash"]
 
 # ================== CONTROLLER ==================== #
 
-FROM operator_base as controller
+FROM operator_base AS controller
 
 # Install Pi-Specific tools...
 
