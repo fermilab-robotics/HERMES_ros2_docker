@@ -13,11 +13,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 1. Set up Docker Buildx (required for 'gha' caching)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Test Build 'laptop_dev' target
-        run: docker compose build laptop_dev
+        # The -f flags merge your base compose with the GitHub caching rules
+        run: docker compose -f docker-compose.yml -f docker-compose.gh-cache.yml build laptop_dev
+        env:
+          BUILDX_NO_DEFAULT_LOAD: 1
 
       - name: Test Build 'controller' target
-        run: docker compose build controller
+        run: docker compose -f docker-compose.yml -f docker-compose.gh-cache.yml build controller
+        env:
+          BUILDX_NO_DEFAULT_LOAD: 1
 
       - name: Test Build 'robot' target (Production)
-        run: docker compose build robot_prod
+        run: docker compose -f docker-compose.yml -f docker-compose.gh-cache.yml build robot_prod
+        env:
+          BUILDX_NO_DEFAULT_LOAD: 1

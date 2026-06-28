@@ -150,7 +150,8 @@ RUN mkdir -p src && vcs import src < /tmp/hardware.repos
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     liblgpio-dev \
-    python3-pip \
+    python3-lgpio \
+    python3-gpiozero \
     && pip3 install gpiozero lgpio --break-system-packages \
     && rm -rf /var/lib/apt/lists/*
 
