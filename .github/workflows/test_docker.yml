@@ -9,6 +9,10 @@ on:
 jobs:
   test-build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+      # ADD MORE TARGETS/EDIT here!
+        target: [laptop_dev, controller, robot_prod]
     steps:
         # 1. Download your code so the runner can see your root Dockerfile
       - name: Checkout repository
@@ -32,36 +36,13 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
     # Build laptop_dev target
-      - name: Build 'laptop_dev' docker image
+      - name: Build and push docker target
         uses: docker/build-push-action@v7
         with:
           context: .
           file: ./Dockerfile
-          target: laptop_dev
+          target: ${{ matrix.target }}
           push: true
-          tags: ghcr.io/${{ steps.repo.outputs.name }}:laptop_dev
-          cache-from: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-laptop_dev
-          cache-to: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-laptop_dev,mode=max
-
-      - name: Build 'controller' docker image
-        uses: docker/build-push-action@v7
-        with:
-          context: .
-          file: ./Dockerfile
-          target: controller
-          push: true
-          tags: ghcr.io/${{ steps.repo.outputs.name }}:controller
-          cache-from: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-controller
-          cache-to: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-controller,mode=max
-      
-      - name: Build 'robot_prod' docker image
-        uses: docker/build-push-action@v7
-        with:
-          context: .
-          file: ./Dockerfile
-          target: robot_prod
-          push: true
-          tags: ghcr.io/${{ steps.repo.outputs.name }}:robot_prod`
-          cache-from: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-robot_prod
-          cache-to: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-robot_prod,mode=max
-    
+          tags: ghcr.io/${{ steps.repo.outputs.name }}:${{matrix.target}}
+          cache-from: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-${{matrix.target}}
+          cache-to: type=registry,ref=ghcr.io/${{ steps.repo.outputs.name }}:cache-${{matrix.target}},mode=max
