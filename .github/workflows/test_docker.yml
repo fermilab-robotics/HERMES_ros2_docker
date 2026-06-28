@@ -1,5 +1,5 @@
 name: Test Docker Builds
-
+# Gh-actions caching: https://www.blacksmith.sh/blog/cache-is-king-a-guide-for-docker-layer-caching-in-github-actions
 on:
   push:
     branches:
@@ -10,12 +10,26 @@ jobs:
   test-build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+        # 1. Log into GitHub's built-in container registry
+      - name: Log in to GitHub Container Registry (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }} # Uses your GitHub username automatically
+          password: ${{ secrets.GITHUB_TOKEN }} # Generated automatically by GitHub
 
       # 1. Set up Docker Buildx (required for 'gha' caching)
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Build and push docker image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: user/app:latest
+          cache-from: type=registry,ref=user/app:buildcache
+          cache-to: type=registry,ref=user/app:buildcache,mode=max
 
       - name: Test Build 'laptop_dev' target
         # The -f flags merge your base compose with the GitHub caching rules
