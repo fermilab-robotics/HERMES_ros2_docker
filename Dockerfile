@@ -134,7 +134,6 @@ COPY hardware.repos /tmp/hardware.repos
 # Use vcstool to dynamically clone the hardware repos into src/
 RUN vcs import src < /tmp/hardware.repos
 
-
 # Install hardware interface libraries
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
@@ -147,8 +146,8 @@ USER $USERNAME
 
 # Compile the code during image build
 RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
-    --mount=type=cache, target=/home/ros/ws/build,uid=$USER_UID,gid=$USER_GID \
-    --mount=type=cache, target=/home/ros/ws/log,uid=$USER_UID,gid=$USER_GID \
+    --mount=type=cache,target=/home/ros/ws/build,uid=$USER_UID,gid=$USER_GID \
+    --mount=type=cache,target=/home/ros/ws/log,uid=$USER_UID,gid=$USER_GID \
     bash -c "source /opt/ros/${ROS_DISTRO}/setup.sh && colcon build --symlink-install"
 
 # Source the workspace in bashrc
