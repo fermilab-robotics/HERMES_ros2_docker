@@ -105,11 +105,6 @@ services:
     
     device_cgroup_rules:
       - 'c *:* rmw'
-    
-    command: >
-      bash -c "source /opt/ros/lyrical/setup.bash &&
-        ros2 run image_view image_view --ros-args -p image:=/camera/camera/color/image_raw"
-
 
 
   robot_prod:

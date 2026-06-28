@@ -123,6 +123,17 @@ USER $USERNAME
 # Enter bash shell by default
 CMD ["/bin/bash"]
 
+# ================== CONTROLLER ==================== #
+
+FROM operator_base as controller
+
+# Install Pi-Specific tools...
+
+
+# Drop privileges
+USER $USERNAME
+
+CMD ["ros2", "run", "image_view", "image_view", "--ros-args", "-p", "image:=/camera/camera/color/image_raw"]
 
 # ================== ROBOT ====================== #
 FROM base AS robot_prod
