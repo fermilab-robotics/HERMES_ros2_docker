@@ -12,8 +12,6 @@
   <depend>teleop_twist_keyboard</depend>
   <depend>teleop_twist_joy</depend>
 
-  <exec_depend>python3-gpiozero</exec_depend>
-  <exec_depend>python3-lgpio</exec_depend>
   <exec_depend>utils_py</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
