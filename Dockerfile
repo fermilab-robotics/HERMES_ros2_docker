@@ -133,7 +133,11 @@ FROM operator_base AS controller
 # Drop privileges
 USER $USERNAME
 
-CMD ["ros2", "run", "image_view", "image_view", "--ros-args", "-p", "image:=/camera/camera/color/image_raw"]
+CMD ["ros2", "topic", "echo", "/camera/camera/color/image_raw"]
+
+# CMD ["ros2", "run", "image_view", "image_view", "--ros-args", "-p", "image:=/camera/camera/color/image_raw"]
+# for Controller prod:
+# CMD ["ros2", "launch", "controller_bringup", "controller_launch.py"]
 
 
 # ================= ROBOT BASE ====================== #

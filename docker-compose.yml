@@ -106,7 +106,7 @@ services:
     device_cgroup_rules:
       - 'c *:* rmw'
 
-  robot_prod:
+  robot_dev:
     build:
       # Explain this line:
       context: .
