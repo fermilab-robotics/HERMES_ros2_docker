@@ -159,8 +159,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # ================= ROBOT DEV ====================== #
 FROM robot_base AS robot_dev
 
-# Exit the root user
-USER ${USERNAME}
+# Note: We must have permissions to be able to do this, so we need to run as root for this step. We can drop privileges later.
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
@@ -173,7 +172,10 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     apt-get update \
     && rosdep install -y --ignore-src --from-paths src \
     && rm -rf /var/lib/apt/lists/*
-    
+
+# Exit the root user
+USER ${USERNAME}
+
 # Enter bash shell by default
 CMD ["/bin/bash"]
 # Source entrypoint
