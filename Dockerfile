@@ -185,7 +185,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install ROS2 dependencies:
-RUN apt-get-update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-camera-ros \
     && rm -rf /var/lib/apt/lists/*
 
