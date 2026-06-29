@@ -82,7 +82,7 @@ services:
 
     # For gpio access
     group_add:
-      - gpio
+      - "986"
 
     environment:
       - ROS_DOMAIN_ID=42
