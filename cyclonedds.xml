@@ -2,7 +2,9 @@
 <CycloneDDS>
     <Domain>
         <General>
-            <NetworkInterface name="wlan0"/>
+            <Interfaces>
+                <NetworkInterface name="wlan0"/>
+            </Interfaces>
             <AllowMulticast>true</AllowMulticast>
             <EnableMulticastLoopback>true</EnableMulticastLoopback>
         </General>
