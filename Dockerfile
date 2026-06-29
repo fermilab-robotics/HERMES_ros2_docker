@@ -169,7 +169,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     swig \
     python3-dev \
     python3-pip \
-    python3-gpiozero \
     && pip3 install --upgrade lgpio --break-system-packages \
     && rm -rf /var/lib/apt/lists/*
 
