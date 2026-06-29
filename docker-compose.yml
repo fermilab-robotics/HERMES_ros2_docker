@@ -121,6 +121,10 @@ services:
     privileged: true
     user: ros
 
+    # Add gpio group for gpiozero access
+    group_add:
+      - "986"
+
     environment:
       - ROS_DOMAIN_ID=42
       - GPIOZERO_PIN_FACTORY=lgpio
@@ -156,7 +160,7 @@ services:
     stdin_open: true
     tty: true
     group_add:
-      - gpio
+      - "986"
     # Placed inside the user's home directory
     working_dir: /home/ros/ws
     privileged: true
