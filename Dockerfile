@@ -135,8 +135,9 @@ USER $USERNAME
 
 CMD ["ros2", "run", "image_view", "image_view", "--ros-args", "-p", "image:=/camera/camera/color/image_raw"]
 
-# ================== ROBOT ====================== #
-FROM base AS robot_prod
+
+# ================= ROBOT BASE ====================== #
+FROM base AS robot_base
 
 # Use vcstool to clone hardware repos into src/
 # Copy the hardware manifest into the container
@@ -154,7 +155,35 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-gpiozero \
     && rm -rf /var/lib/apt/lists/*
 
-USER $USERNAME
+
+# ================= ROBOT DEV ====================== #
+FROM robot_base AS robot_dev
+
+# Exit the root user
+USER ${USERNAME}
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    gdb \
+    vim \
+    && rm -rf /var/lib/apt/lists/*
+
+# Temperarily bind code to let rosdep scan and install dependencies
+RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
+    apt-get update \
+    && rosdep install -y --ignore-src --from-paths src \
+    && rm -rf /var/lib/apt/lists/*
+    
+# Enter bash shell by default
+CMD ["/bin/bash"]
+# Source entrypoint
+RUN echo "source /home/${USERNAME}/ws/install/setup.bash" >> /home/${USERNAME}/.bashrc
+
+# ================== ROBOT PRODUCTION ====================== #
+FROM robot_base AS robot_prod
+
+# Exit the root user
+USER ${USERNAME}
 
 # Compile the code during image build
 RUN --mount=type=bind,source=source,target=/home/ros/ws/src \

@@ -106,7 +106,50 @@ services:
     device_cgroup_rules:
       - 'c *:* rmw'
 
+  robot_prod:
+    build:
+      # Explain this line:
+      context: .
+      args:
+        # Must match the Dockerfile
+        USERNAME: ros
+        USER_UID: 1000
+        USER_GID: 1000
 
+      target: robot_dev
+
+    image: ros2-lyrical-robot_dev:latest
+    # GUI and permission
+    network_mode: host 
+    ipc: host
+    pid: host
+    stdin_open: true
+    tty: true
+    # Placed inside the user's home directory
+    working_dir: /home/ros/ws
+    privileged: true
+    user: ros
+
+    environment:
+      - ROS_DOMAIN_ID=42
+      - GPIOZERO_PIN_FACTORY=lgpio
+      - RPI_LGPIO_CHIP=0
+      - DISPLAY=${DISPLAY:-:0}
+    volumes:
+      # Named volume keeps build, install, and log files cached and fast
+      - robot_cache:/home/ros/ws
+
+      # My live code source maps on top
+      - ./source:/home/ros/ws/src
+
+      # For devices
+      # Device cgroup rule (string that has the device type 'c for character', major id 13 for all inputdevicse, then minor id (* for all))
+      - /dev:/dev
+
+    device_cgroup_rules:
+      - 'c *:* rmw'
+    
+    # -c tells bash to execute from a string
   robot_prod:
     build:
       # Explain this line:
@@ -153,3 +196,4 @@ volumes:
   laptop_install:
   laptop_log:
   controller_cache:
+  robot_cache:

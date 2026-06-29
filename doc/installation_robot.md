@@ -70,6 +70,7 @@ sudo usermod -aG docker $USER
 newgrp docker
 ```
 
+Now, [clone the repository onto the device](/doc/clone_repo.md)
 Clone the Hermes_ros2_docker repository onto the Pi:
 `git clone https://github.com/fermilab-robotics/HERMES_ros2_docker.git`
 
