@@ -173,9 +173,6 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     && rosdep install -y --ignore-src --from-paths src \
     && rm -rf /var/lib/apt/lists/*
 
-# Exit the root user
-USER ${USERNAME}
-
 # Enter bash shell by default
 CMD ["/bin/bash"]
 # Source entrypoint
