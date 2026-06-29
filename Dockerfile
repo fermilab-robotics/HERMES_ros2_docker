@@ -33,8 +33,6 @@ RUN groupadd --gid $USER_GID $USERNAME \
     # Change ownership of the directory to the new user and group
     && chown $USER_UID:$USER_GID /home/$USERNAME/.config
 
-
-
 # Add sudo support.
 RUN apt-get update \
     && apt-get install -y sudo \
@@ -77,8 +75,12 @@ RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USERNAME}/.bashrc
 # Setup ROS2 workspace
 WORKDIR /home/${USERNAME}/ws
 
-### --- Setup entrypoint ---------------- ###
-RUN chown -R ${USER_UID}:${USER_GID} /home/${USERNAME}/ws
+# Pre-create workspace dirs and give ownership to the non-root user.
+# This is critical: if these dirs are root-owned at runtime, colcon build
+# fails unless you sudo chown manually.
+RUN mkdir -p build install log \
+    && chown -R ${USER_UID}:${USER_GID} /home/${USERNAME}/ws
+
 COPY entrypoint.sh /entrypoint.sh
 RUN ["chmod", "+x", "/entrypoint.sh"]
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
@@ -127,6 +129,9 @@ CMD ["/bin/bash"]
 
 FROM operator_base AS controller_dev
 
+# Drop privileges:
+USER $USERNAME
+
 # Install Pi-Specific tools...
 
 CMD ["/bin/bash"]
@@ -141,6 +146,8 @@ CMD ["/bin/bash"]
 FROM operator_base AS controller_prod
 # Drop privileges
 USER $USERNAME
+
+# TODO: Replace with CMD ["ros2", "launch", "controller_bringup", "controller_launch.py"]
 CMD ["ros2", "topic", "echo", "/camera/camera/color/image_raw"]
 
 # ================= ROBOT BASE ====================== #
@@ -180,8 +187,12 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     && rosdep install -y --ignore-src --from-paths src \
     && rm -rf /var/lib/apt/lists/*
 
+
+# Root work is done, drop privilegs
+USER $USERNAME
+
 # Source entrypoint (not working for some reason yet)
-# RUN echo "source /home/${USERNAME}/ws/install/setup.bash" >> /home/${USERNAME}/.bashrc
+RUN echo "source /home/${USERNAME}/ws/install/setup.bash" >> /home/${USERNAME}/.bashrc
 
 # Enter bash shell by default
 CMD ["/bin/bash"]
