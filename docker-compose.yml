@@ -1,26 +1,35 @@
+x-device-access: &device-access
+  device_cgroup_rules:
+    - 'c *:* rmw'
+  volumes:
+    - /dev:/dev
+
+# Common ROS networking settings
+x-ros-net: &ros-net
+  network_mode: host
+  ipc: host
+  pid: host
+
+# Common build args (must match Dockerfile ARGs)
+x-build-args: &build-args
+  USERNAME: ros
+  USER_UID: 1000
+  USER_GID: 1000
+
 services:
-  # Laptop
+  # Laptop (operator-side dev)
   laptop_dev:
     build:
-      # Explain this line:
       context: .
-      args:
-        # Must match the Dockerfile
-        USERNAME: ros
-        USER_UID: 1000
-        USER_GID: 1000
+      args: *build-args
 
       # Which dockerfile section to use
       target: laptop_dev
 
     image: ros2-lyrical-laptop_dev:latest
-    # GUI and permission
-    network_mode: host 
-    ipc: host
-    pid: host
-    stdin_open: true
-    tty: true
-    # Placed inside the user's home directory
+
+    <<: *ros-net
+
     working_dir: /home/ros/ws
     user: ros
 
@@ -53,30 +62,19 @@ services:
     device_cgroup_rules:
       - 'c *:* rmw'
     
-    command: /bin/bash
-
   controller_dev:
     build:
       context: .
-      dockerfile: Dockerfile # specify 
-      args:
-        # Must match the Dockerfile
-        USERNAME: ros
-        USER_UID: 1000
-        USER_GID: 1000
-
+      args: *build-args
       # Which dockerfile section to use
       target: controller_dev
 
       
     image: ros2-lyrical-controller_dev:latest
     container_name: ros2-workspace
-    # GUI and permission
-    network_mode: host 
-    ipc: host
-    pid: host
+    <<: *ros-net
     stdin_open: true
-    privileged: true
+    privileged: true # Needed for GPIO access
     tty: true
     # Placed inside the user's home directory
     working_dir: /home/ros/ws
@@ -84,7 +82,7 @@ services:
 
     # For gpio access
     group_add:
-      - "1000" #
+      - gpio
 
     environment:
       - ROS_DOMAIN_ID=42
@@ -109,19 +107,13 @@ services:
     build:
       # Explain this line:
       context: .
-      args:
-        # Must match the Dockerfile
-        USERNAME: ros
-        USER_UID: 1000
-        USER_GID: 1000
+      args: *build-args
 
       target: robot_dev
 
     image: ros2-lyrical-robot_dev:latest
     # GUI and permission
-    network_mode: host 
-    ipc: host
-    pid: host
+    <<: *ros-net
     stdin_open: true
     tty: true
     # Placed inside the user's home directory
@@ -153,26 +145,22 @@ services:
     build:
       # Explain this line:
       context: .
-      args:
-        # Must match the Dockerfile
-        USERNAME: ros
-        USER_UID: 1000
-        USER_GID: 1000
+      args: *build-args
 
       target: robot_prod
 
     image: ros2-lyrical-robot_prod:latest
     # GUI and permission
-    network_mode: host 
-    ipc: host
-    pid: host
+    <<: *ros-net
     stdin_open: true
     tty: true
+    group_add:
+      - gpio
     # Placed inside the user's home directory
     working_dir: /home/ros/ws
     privileged: true
     user: ros
-
+    restart: unless-stopped
     environment:
       - ROS_DOMAIN_ID=42
       - GPIOZERO_PIN_FACTORY=lgpio
