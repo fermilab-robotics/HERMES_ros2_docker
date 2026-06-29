@@ -177,17 +177,12 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     && rosdep install -y --ignore-src --from-paths src \
     && rm -rf /var/lib/apt/lists/*
 
+# Source entrypoint
+RUN echo "source /home/${USERNAME}/ws/install/setup.bash" >> /home/${USERNAME}/.bashrc
+
 # Enter bash shell by default
 CMD ["/bin/bash"]
 
-# Build the code:
-RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
-    --mount=type=cache,target=/home/ros/ws/build,uid=$USER_UID,gid=$USER_GID \
-    --mount=type=cache,target=/home/ros/ws/log,uid=$USER_UID,gid=$USER_GID \
-    bash -c "source /opt/ros/${ROS_DISTRO}/setup.sh && colcon build"
-
-# Source entrypoint
-RUN echo "source /home/${USERNAME}/ws/install/setup.bash" >> /home/${USERNAME}/.bashrc
 
 # ================== ROBOT PRODUCTION ====================== #
 FROM robot_base AS robot_prod
