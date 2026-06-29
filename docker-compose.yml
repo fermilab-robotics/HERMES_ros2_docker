@@ -121,7 +121,7 @@ services:
     privileged: true
     user: ros
 
-    group-add:
+    group_add:
       - gpio
 
     environment:

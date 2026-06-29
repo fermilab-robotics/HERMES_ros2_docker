@@ -42,7 +42,7 @@ If the status is inactive (dead), start it using:
 
 Use the [VSCode Remote SSH extension](https://code.visualstudio.com/docs/remote/ssh) for convenience:
 
-![VSCode SSH Tool](./images/VSCode_SSH.png)
+![VSCode SSH Tool](../images/VSCode_SSH.png)
 
 Note: Create an SSH key to avoid repeatedly logging in.
 
@@ -71,13 +71,6 @@ newgrp docker
 ```
 
 Now, [clone the repository onto the device](/doc/clone_repo.md)
-Clone the Hermes_ros2_docker repository onto the Pi:
-`git clone https://github.com/fermilab-robotics/HERMES_ros2_docker.git`
 
-Note: Github no longer accepts your account password, you must use a Personal Access Token instead
-On Github, click your profile picture, Settings/Developer Settings / Generate New Token (classic).
-
-cd into the directory:
-`cd HERMES_ros2_docker`
 
 Success! Now go to [build_robot](./build_robot.md) to build the project!
