@@ -123,22 +123,25 @@ USER $USERNAME
 # Enter bash shell by default
 CMD ["/bin/bash"]
 
-# ================== CONTROLLER ==================== #
+# ================== CONTROLLER_DEV ==================== #
 
-FROM operator_base AS controller
+FROM operator_base AS controller_dev
 
 # Install Pi-Specific tools...
 
+CMD ["/bin/bash"]
 
-# Drop privileges
-USER $USERNAME
 
-CMD ["ros2", "topic", "echo", "/camera/camera/color/image_raw"]
 
 # CMD ["ros2", "run", "image_view", "image_view", "--ros-args", "-p", "image:=/camera/camera/color/image_raw"]
 # for Controller prod:
 # CMD ["ros2", "launch", "controller_bringup", "controller_launch.py"]
 
+# ================= CONTROLLER_PROD ==================== #
+FROM operator_base AS controller_prod
+# Drop privileges
+USER $USERNAME
+CMD ["ros2", "topic", "echo", "/camera/camera/color/image_raw"]
 
 # ================= ROBOT BASE ====================== #
 FROM base AS robot_base

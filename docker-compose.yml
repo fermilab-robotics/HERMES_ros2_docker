@@ -55,8 +55,7 @@ services:
     
     command: /bin/bash
 
-  # Target 2: Controller
-  controller:
+  controller_dev:
     build:
       context: .
       dockerfile: Dockerfile # specify 
@@ -67,10 +66,10 @@ services:
         USER_GID: 1000
 
       # Which dockerfile section to use
-      target: controller
+      target: controller_dev
 
       
-    image: ros2-lyrical-controller:latest
+    image: ros2-lyrical-controller_dev:latest
     container_name: ros2-workspace
     # GUI and permission
     network_mode: host 
