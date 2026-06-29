@@ -155,10 +155,10 @@ FROM base AS robot_base
 
 # Use vcstool to clone hardware repos into src/
 # Copy the hardware manifest into the container
-COPY hardware.repos /tmp/hardware.repos
+# COPY hardware.repos /tmp/hardware.repos
 
 # Use vcstool to dynamically clone the hardware repos into src/
-RUN mkdir -p src && vcs import src < /tmp/hardware.repos
+# RUN mkdir -p src && vcs import src < /tmp/hardware.repos
 
 
 # Install hardware interface libraries

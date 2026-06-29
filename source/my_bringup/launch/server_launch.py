@@ -40,8 +40,15 @@ def generate_launch_description():
         parameters=[config_path]
     )
 
-    # camera_node = ...
+    # camera_node
+    camera_node = Node(
+        package='camera_ros',
+        executable='camera_node',
+        name='camera_node',
+        parameters=[config_path]
+    )
 
     ld.add_action(motor_driver_node)
+    ld.add_action(camera_node)
 
     return ld
