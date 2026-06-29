@@ -82,7 +82,7 @@ services:
 
     # For gpio access
     group_add:
-      - "986"
+      - gpio
 
     environment:
       - ROS_DOMAIN_ID=42
@@ -121,11 +121,15 @@ services:
     privileged: true
     user: ros
 
+    group-add:
+      - gpio
+
     environment:
       - ROS_DOMAIN_ID=42
       - GPIOZERO_PIN_FACTORY=lgpio
       - RPI_LGPIO_CHIP=0
       - DISPLAY=${DISPLAY:-:0}
+
     volumes:
       # Named volume keeps build, install, and log files cached and fast
       - robot_cache:/home/ros/ws
