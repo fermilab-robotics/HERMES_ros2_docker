@@ -123,7 +123,8 @@ services:
 
     # Add gpio group for gpiozero access
     group_add:
-      - "986"
+      - "986" # For gpio access
+      - "44" # For camera access
 
     environment:
       - ROS_DOMAIN_ID=42
@@ -163,7 +164,8 @@ services:
     stdin_open: true
     tty: true
     group_add:
-      - "986"
+      - "986" # For gpio access
+      - "44" # For camera
     # Placed inside the user's home directory
     working_dir: /home/ros/ws
     privileged: true
