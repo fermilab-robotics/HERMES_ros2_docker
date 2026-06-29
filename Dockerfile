@@ -184,11 +184,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     vim \
     && rm -rf /var/lib/apt/lists/*
 
+# Install ROS2 dependencies:
+RUN apt-get-update && apt-get install -y --no-install-recommends \
+    ros-${ROS_DISTRO}-camera-ros \
+    && rm -rf /var/lib/apt/lists/*
+
 # Temperarily bind code to let rosdep scan and install dependencies
 RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     apt-get update \
     && rosdep install -y --ignore-src --from-paths src \
     # Do NOT install these two packages, as they are not compatible with the Pi5 and will break the build.
+    # Skip the libcamera package as well, as theRaspberry Pi OS uses a custom libcamera source
     --skip-keys=python3-lgpio,python3-gpiozero \ 
     && rm -rf /var/lib/apt/lists/*
 
