@@ -121,9 +121,6 @@ services:
     privileged: true
     user: ros
 
-    group_add:
-      - gpio
-
     environment:
       - ROS_DOMAIN_ID=42
       - GPIOZERO_PIN_FACTORY=lgpio
