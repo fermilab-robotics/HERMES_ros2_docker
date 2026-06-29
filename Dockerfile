@@ -160,7 +160,6 @@ FROM base AS robot_base
 # Use vcstool to dynamically clone the hardware repos into src/
 # RUN mkdir -p src && vcs import src < /tmp/hardware.repos
 
-
 # Install hardware interface libraries
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
@@ -183,6 +182,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gdb \
     vim \
     && rm -rf /var/lib/apt/lists/*
+
 
 # Install ROS2 dependencies:
 RUN apt-get update && apt-get install -y --no-install-recommends \

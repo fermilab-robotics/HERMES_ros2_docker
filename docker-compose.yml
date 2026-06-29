@@ -131,13 +131,18 @@ services:
       - GPIOZERO_PIN_FACTORY=lgpio
       - RPI_LGPIO_CHIP=0
       - DISPLAY=${DISPLAY:-:0}
+      # For camera
+      - UDEV=1
 
     volumes:
       # Named volume keeps build, install, and log files cached and fast
       - robot_cache:/home/ros/ws
 
       # For camera access
-      - /run/udev:/run/udev:ro
+      - /run/udev:/run/udev
+      - /run/dbus:/run/dbus
+
+
 
       # My live code source maps on top
       - ./source:/home/ros/ws/src
@@ -184,7 +189,8 @@ services:
       - /dev:/dev
 
       # For camera access
-      - /run/udev:/run/udev:ro
+      - /run/udev:/run/udev
+      - /run/dbus:/run/dbus
     device_cgroup_rules:
       - 'c *:* rmw'
     
