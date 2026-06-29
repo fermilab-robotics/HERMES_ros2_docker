@@ -180,8 +180,8 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     && rosdep install -y --ignore-src --from-paths src \
     && rm -rf /var/lib/apt/lists/*
 
-# Source entrypoint
-RUN echo "source /home/${USERNAME}/ws/install/setup.bash" >> /home/${USERNAME}/.bashrc
+# Source entrypoint (not working for some reason yet)
+# RUN echo "source /home/${USERNAME}/ws/install/setup.bash" >> /home/${USERNAME}/.bashrc
 
 # Enter bash shell by default
 CMD ["/bin/bash"]

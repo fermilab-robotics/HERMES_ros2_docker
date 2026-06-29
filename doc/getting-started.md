@@ -5,7 +5,7 @@ Prerequisites for the framework are:
 
 
 ### Laptop:
-1. [Setup the controller device](/doc/installation_controller.md) or [Setup on the development laptop](/doc/installation_laptop.md)
+1. [Setup the controller device](/doc/controller/installation_controller.md) or [Setup on the development laptop](/doc/laptop/installation_laptop.md)
 ### Pi
-1. [Setup the Pi](/doc/installation_robot.md)
-2. [Build the project on the Pi](/doc/build_robot.md)
+1. [Setup the Pi](/doc/robot/installation_robot.md)
+2. [Build the project on the Pi](/doc/robot/build_robot.md)
