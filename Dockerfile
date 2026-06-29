@@ -166,6 +166,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     liblgpio-dev \
     # Note, we need to use the pip gpiozero
+    swig \
+    python3-dev \
     python3-pip \
     python3-gpiozero \
     && pip3 install --upgrade lgpio --break-system-packages \
