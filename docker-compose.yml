@@ -72,7 +72,8 @@ services:
       
     image: ros2-controller_dev:latest
     container_name: ros2-workspace
-    <<: *ros-net
+    # <<: *ros-net
+    network_mode: host
     stdin_open: true
     privileged: true # Needed for PIO access
     tty: true
@@ -86,6 +87,8 @@ services:
       - GPIOZERO_PIN_FACTORY=lgpio
       - RPI_LGPIO_CHIP=0
       - DISPLAY=${DISPLAY}
+      # Tell X11 where to find auth cookie
+      - XAUTHORITY=/home/ros/.Xauthority
 
     volumes:
       # Named volume keeps build, install, and log files cached and fast
@@ -99,6 +102,8 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       # map devices 
       - /dev:/dev
+      # MAP THE COOKIE: Mounts your host login's display permission token straight to the ros user's home folder
+      - ~/.Xauthority:/home/ros/.Xauthority:ro
     
     device_cgroup_rules:
       - 'c *:* rmw'
