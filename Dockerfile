@@ -13,6 +13,7 @@
 
 # The version of ROS2 to use.
 ARG ROS_DISTRO=jazzy
+ENV ROS_DISTRO=${ROS_DISTRO}
 
 FROM ros:${ROS_DISTRO}-ros-base AS base
 

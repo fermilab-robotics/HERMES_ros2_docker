@@ -41,14 +41,25 @@ def generate_launch_description():
     )
 
     # camera_node
-    camera_node = Node(
-        package='camera_ros',
-        executable='camera_node',
-        name='camera_node',
+    # camera_node = Node(
+    #     package='camera_ros',
+    #     executable='camera_node',
+    #     name='camera_node',
+    #     parameters=[config_path]
+    # )
+
+    # ld.add_action(camera_node)
+
+    # realsense node
+    realsense_node = Node(
+        package='realsense2_camera',
+        executable='realsense2_camera_node',
+        name='realsense2_camera_node',
         parameters=[config_path]
     )
 
+    # Add nodes to launch description
     ld.add_action(motor_driver_node)
-    ld.add_action(camera_node)
-
+    ld.add_action(realsense_node)
+    
     return ld

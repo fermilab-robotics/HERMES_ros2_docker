@@ -26,7 +26,7 @@ services:
       # Which dockerfile section to use
       target: laptop_dev
 
-    image: ros2-lyrical-laptop_dev:latest
+    image: ros2-laptop_dev:latest
 
     <<: *ros-net
 
@@ -70,19 +70,15 @@ services:
       target: controller_dev
 
       
-    image: ros2-lyrical-controller_dev:latest
+    image: ros2-controller_dev:latest
     container_name: ros2-workspace
     <<: *ros-net
     stdin_open: true
-    privileged: true # Needed for GPIO access
+    privileged: true # Needed for PIO access
     tty: true
     # Placed inside the user's home directory
     working_dir: /home/ros/ws
     user: ros
-
-    # For gpio access
-    group_add:
-      - gpio
 
     environment:
       - ROS_DOMAIN_ID=42
@@ -112,7 +108,7 @@ services:
 
       target: robot_dev
 
-    image: ros2-lyrical-robot_dev:latest
+    image: ros2-robot_dev:latest
     # GUI and permission
     <<: *ros-net
     stdin_open: true
@@ -166,7 +162,7 @@ services:
 
       target: robot_prod
 
-    image: ros2-lyrical-robot_prod:latest
+    image: ros2-robot_prod:latest
     # GUI and permission
     <<: *ros-net
     stdin_open: true

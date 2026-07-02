@@ -3,3 +3,8 @@ motor_driver_subscriber:
     max_speed: 1.0
     track_width: 0.33
 
+realsense2_camera_node:
+  ros__parameters:
+    
+
+
