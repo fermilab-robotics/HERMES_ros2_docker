@@ -183,7 +183,7 @@ FROM robot_base AS robot_dev
 
 # Note: We must have permissions to be able to do this, so we need to run as root for this step. We can drop privileges later.
 
-// Install dev-specific debugging tools
+# Install dev-specific debugging tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     gdb \
