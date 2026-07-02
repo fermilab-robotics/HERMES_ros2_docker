@@ -241,10 +241,9 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src_host \
     --mount=type=cache,target=/home/ros/ws/build,uid=$USER_UID,gid=$USER_GID \
     --mount=type=cache,target=/home/ros/ws/log,uid=$USER_UID,gid=$USER_GID \
     # Copy host packages over next to the vcs repos so everything compiles safely without being shadowed
-    bash -c "cp -r /home/ros/ws/src_host/* /home/ros/ws/src/ 2>/dev/null || true \
-    && source /opt/ros/${ROS_DISTRO}/setup.sh \
-    && colcon build"
-
+    bash -c "(cp -r /home/ros/ws/src_host/* /home/ros/ws/src/ 2>/dev/null || true) \
+        && source /opt/ros/${ROS_DISTRO}/setup.sh \
+        && colcon build"
 # Source the workspace in bashrc
 RUN echo "source /home/${USERNAME}/ws/install/setup.bash" >> /home/${USERNAME}/.bashrc
 
