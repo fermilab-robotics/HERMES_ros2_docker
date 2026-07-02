@@ -191,6 +191,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-camera-ros \
     ros-${ROS_DISTRO}-librealsense2* \
+    ros-${ROS_DISTRO}-realsense2-camera \
     && rm -rf /var/lib/apt/lists/*
 
 # ================= ROBOT DEV ====================== #
