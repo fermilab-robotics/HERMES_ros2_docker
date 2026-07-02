@@ -99,7 +99,9 @@ FROM base AS operator_base
 
 # Install the Telemetry and joystick diagnostic tools
 # Program for testing joystick devices
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get update && apt-get install -y --no-install-recommends \
     evtest \
     jstest-gtk \
     python3-serial \
@@ -109,6 +111,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # ROOT user: Temperarily bind code to let rosdep scan and install dependencies
 RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
+    --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update \
     && rosdep install -y --ignore-src --from-paths src \
     && rm -rf /var/lib/apt/lists/*
@@ -133,6 +137,12 @@ CMD ["/bin/bash"]
 # ================== CONTROLLER_DEV ==================== #
 
 FROM operator_base AS controller_dev
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get update && apt-get install -y --no-install-recommends \
+    # (Put your Pi-Controller-specific dev tools here, like rpi-imager, screen, ssh, etc.) \
+    && rm -rf /var/lib/apt/lists/*
 
 # Drop privileges:
 USER $USERNAME
@@ -189,7 +199,9 @@ FROM robot_base AS robot_dev
 # Note: We must have permissions to be able to do this, so we need to run as root for this step. We can drop privileges later.
 
 # Install dev-specific debugging tools
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get update && apt-get install -y --no-install-recommends \
     git \
     gdb \
     vim \
@@ -197,10 +209,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Temperarily bind code to let rosdep scan and install dependencies
 RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
+    # Cache
+    --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update \
     && rosdep install -y --ignore-src --from-paths src \
     # Do NOT install these two packages, as they are not compatible with the Pi5 and will break the build.
-    # Skip the libcamera package as well, as theRaspberry Pi OS uses a custom libcamera source
     --skip-keys=python3-lgpio,python3-gpiozero \ 
     && rm -rf /var/lib/apt/lists/*
 

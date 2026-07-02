@@ -102,7 +102,6 @@ services:
 
   robot_dev:
     build:
-      # Explain this line:
       context: .
       args: *build-args
 
@@ -156,7 +155,6 @@ services:
     # -c tells bash to execute from a string
   robot_prod:
     build:
-      # Explain this line:
       context: .
       args: *build-args
 
