@@ -90,7 +90,10 @@ services:
     volumes:
       # Named volume keeps build, install, and log files cached and fast
       # TODO: Update controller cache following robot_dev cache pattern - prevent bug
-      - controller_cache:/home/ros/ws
+      # FIX: Cache only the sub-folders, leaving /home/ros/ws root untouched
+      - controller_build:/home/ros/ws/build
+      - controller_install:/home/ros/ws/install
+      - controller_log:/home/ros/ws/log
       # My live code source maps on top
       - ./source:/home/ros/ws/src
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
@@ -197,7 +200,9 @@ volumes:
   laptop_build:
   laptop_install:
   laptop_log:
-  controller_cache:
+  controller_build:
+  controller_install:
+  controller_log:
   # Cache 
   robot_build:
   robot_install:

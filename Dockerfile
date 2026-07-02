@@ -170,6 +170,8 @@ FROM base AS robot_base
 
 # Use vcstool to clone hardware repos into src/
 # Copy the hardware manifest into the container
+WORKDIR /home/ros/ws
+
 COPY hardware.repos /tmp/hardware.repos
 
 # Use vcstool to dynamically clone the hardware repos into src/
