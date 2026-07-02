@@ -12,7 +12,7 @@
     # Link: https://github.com/althack/dockerfiles/blob/main/ros2/lyrical.Dockerfile
 
 # The version of ROS2 to use.
-ARG ROS_DISTRO=lyrical
+ARG ROS_DISTRO=jazzy
 
 FROM ros:${ROS_DISTRO}-ros-base AS base
 
