@@ -170,10 +170,10 @@ FROM base AS robot_base
 
 # Use vcstool to clone hardware repos into src/
 # Copy the hardware manifest into the container
-# COPY hardware.repos /tmp/hardware.repos
+COPY hardware.repos /tmp/hardware.repos
 
 # Use vcstool to dynamically clone the hardware repos into src/
-# RUN mkdir -p src && vcs import src < /tmp/hardware.repos
+RUN mkdir -p src && vcs import src < /tmp/hardware.repos
 
 # Install hardware interface libraries
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -191,7 +191,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-camera-ros \
     ros-${ROS_DISTRO}-librealsense2* \
-    ros-${ROS_DISTRO}-realsense2-camera \
     && rm -rf /var/lib/apt/lists/*
 
 # ================= ROBOT DEV ====================== #
@@ -214,9 +213,10 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update \
-    && rosdep install -y --ignore-src --from-paths src \
+    && rosdep install -y --ignore-src --from-paths /home/ros/ws/src \
     # Do NOT install these two packages, as they are not compatible with the Pi5 and will break the build.
-    --skip-keys=python3-lgpio,python3-gpiozero \ 
+    # Do not install librealsense2 (cloning realsense from source)
+    --skip-keys="python3-lgpio python3-gpiozero librealsense2 realsense2_camera" \
     && rm -rf /var/lib/apt/lists/*
 
 
@@ -237,10 +237,13 @@ FROM robot_base AS robot_prod
 USER ${USERNAME}
 
 # Compile the code during image build
-RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
+RUN --mount=type=bind,source=source,target=/home/ros/ws/src_host \
     --mount=type=cache,target=/home/ros/ws/build,uid=$USER_UID,gid=$USER_GID \
     --mount=type=cache,target=/home/ros/ws/log,uid=$USER_UID,gid=$USER_GID \
-    bash -c "source /opt/ros/${ROS_DISTRO}/setup.sh && colcon build"
+    # Copy host packages over next to the vcs repos so everything compiles safely without being shadowed
+    bash -c "cp -r /home/ros/ws/src_host/* /home/ros/ws/src/ 2>/dev/null || true \
+    && source /opt/ros/${ROS_DISTRO}/setup.sh \
+    && colcon build"
 
 # Source the workspace in bashrc
 RUN echo "source /home/${USERNAME}/ws/install/setup.bash" >> /home/${USERNAME}/.bashrc
