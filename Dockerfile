@@ -192,7 +192,7 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     # Cache
     --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
-    && apt-get update \
+    apt-get update \
     && rosdep install -y --ignore-src --from-paths /home/ros/ws/src \
     # Do NOT install these two packages, as they are not compatible with the Pi5 and will break the build.
     # Do not install librealsense2 (cloning realsense from source)
