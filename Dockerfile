@@ -117,33 +117,20 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     && rosdep install -y --ignore-src --from-paths src \
     && rm -rf /var/lib/apt/lists/*
 
-# ================== Laptop_Dev (Development ================ #
-FROM operator_base AS laptop_dev
-
-# Install dev-specific tools
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    git \
-    gdb \
-    vim \
-    && rm -rf /var/lib/apt/lists/*
-
-
-# Drop privileiges
-USER $USERNAME
-
-# Enter bash shell by default
-CMD ["/bin/bash"]
 
 # ================== CONTROLLER_DEV ==================== #
 
 FROM operator_base AS controller_dev
 
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
+    --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
-    # (Put your Pi-Controller-specific dev tools here, like rpi-imager, screen, ssh, etc.) \
+    git \
+    gdb \
+    vim \
     && rm -rf /var/lib/apt/lists/*
-
+    
 # Drop privileges:
 USER $USERNAME
 
@@ -195,6 +182,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-librealsense2* \
     && rm -rf /var/lib/apt/lists/*
 
+    
+# Temperarily bind code to let rosdep scan and install dependencies
+RUN --mount=type=bind,source=source,target=/home/ros/ws/src_host \
+    # Cache
+    --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    bash -c "cp -r /home/ros/ws/src_host/* /home/ros/ws/src/ 2>/dev/null || true \
+    && apt-get update \
+    && rosdep install -y --ignore-src --from-paths /home/ros/ws/src \
+    # Do NOT install these two packages, as they are not compatible with the Pi5 and will break the build.
+    # Do not install librealsense2 (cloning realsense from source)
+    --skip-keys=\"python3-lgpio python3-gpiozero librealsense2 realsense2_camera\" \
+    && rm -rf /var/lib/apt/lists/*"
+
+
 # ================= ROBOT DEV ====================== #
 FROM robot_base AS robot_dev
 
@@ -209,24 +211,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     vim \
     && rm -rf /var/lib/apt/lists/*
 
-# Temperarily bind code to let rosdep scan and install dependencies
-RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
-    # Cache
-    --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
-    apt-get update \
-    && rosdep install -y --ignore-src --from-paths /home/ros/ws/src \
-    # Do NOT install these two packages, as they are not compatible with the Pi5 and will break the build.
-    # Do not install librealsense2 (cloning realsense from source)
-    --skip-keys="python3-lgpio python3-gpiozero librealsense2 realsense2_camera" \
-    && rm -rf /var/lib/apt/lists/*
-
 
 # Root work is done, drop privilegs
 USER $USERNAME
-
-# Source entrypoint (not working for some reason yet)
-RUN echo "source /home/${USERNAME}/ws/install/setup.bash" >> /home/${USERNAME}/.bashrc
 
 # Enter bash shell by default
 CMD ["/bin/bash"]
@@ -246,8 +233,6 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src_host \
     bash -c "(cp -r /home/ros/ws/src_host/* /home/ros/ws/src/ 2>/dev/null || true) \
         && source /opt/ros/${ROS_DISTRO}/setup.sh \
         && colcon build"
-# Source the workspace in bashrc
-RUN echo "source /home/${USERNAME}/ws/install/setup.bash" >> /home/${USERNAME}/.bashrc
 
 # Production command
 CMD ["ros2", "launch", "robot_bringup", "server_launch.py"]
