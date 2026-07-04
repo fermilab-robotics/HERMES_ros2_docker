@@ -161,7 +161,7 @@ WORKDIR /home/ros/ws
 COPY hardware.repos /tmp/hardware.repos
 
 # Use vcstool to dynamically clone the hardware repos into source/
-RUN vcs import source < /tmp/hardware.repos
+RUN mkdir -p source && vcs import source < /tmp/hardware.repos
 
 # Install hardware interface libraries
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
