@@ -42,6 +42,8 @@ services:
       - DISPLAY=${DISPLAY:-:0}
       # Tell X11 where to find auth cookie
       - XAUTHORITY=/home/ros/.Xauthority
+      - QT_X11_NO_MITSHM=1
+
 
     volumes:
       - /dev:/dev

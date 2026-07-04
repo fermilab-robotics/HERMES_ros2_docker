@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
       # ADD MORE TARGETS/EDIT here!
-        target: [controller_dev, robot_prod, robot_dev]
+        target: [controller_dev, robot_dev]
     steps:
         # 1. Download your code so the runner can see your root Dockerfile
       - name: Checkout repository
