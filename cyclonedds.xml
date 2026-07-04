@@ -2,9 +2,11 @@
 <CycloneDDS>
     <Domain>
         <General>
+            <!-- Had this because Linux Laptop would keep trying to yell down ethernet port instead of Wi-Fi
             <Interfaces>
                 <NetworkInterface name="wlan0"/>
             </Interfaces>
+            -->
             <AllowMulticast>true</AllowMulticast>
             <EnableMulticastLoopback>true</EnableMulticastLoopback>
         </General>
