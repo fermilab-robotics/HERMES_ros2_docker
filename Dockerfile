@@ -155,14 +155,13 @@ CMD ["ros2", "topic", "echo", "/camera/camera/color/image_raw"]
 # ================= ROBOT BASE ====================== #
 FROM base AS robot_base
 
-# Use vcstool to clone hardware repos into src/
 # Copy the hardware manifest into the container
 WORKDIR /home/ros/ws
 
-# COPY hardware.repos /tmp/hardware.repos
+COPY hardware.repos /tmp/hardware.repos
 
-# Use vcstool to dynamically clone the hardware repos into src/
-# RUN mkdir -p src && vcs import src < /tmp/hardware.repos
+# Use vcstool to dynamically clone the hardware repos into source/
+RUN vcs import source < /tmp/hardware.repos
 
 # Install hardware interface libraries
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
@@ -185,9 +184,10 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     ros-${ROS_DISTRO}-camera-ros \
     ros-${ROS_DISTRO}-librealsense2* \
     && rm -rf /var/lib/apt/lists/*
-
     
+
 # Temperarily bind code to let rosdep scan and install dependencies
+# Note: the docker mount overwrites the src folder
 RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     # Cache
     --mount=type=cache,target=/var/cache/apt,sharing=locked \
