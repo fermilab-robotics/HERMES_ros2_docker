@@ -16,6 +16,45 @@ x-build-args: &build-args
   USER_GID: 1000
 
 services:
+  laptop_dev:
+    build:
+      context: .
+      args: *build-args
+      # Which dockerfile section to use
+      target: laptop_dev
+
+    image: ros2-laptop-dev:latest
+    <<: [*ros-net, *device-access]
+    stdin_open: true
+    privileged: true # Needed for PIO access
+    tty: true
+    # Placed inside the user's home directory
+    working_dir: /home/ros/ws
+    user: ros
+
+    environment:
+      - ROS_DOMAIN_ID=42
+      # For linux native: Just use 0 for display
+      # For windows -in-linux(example: Hyper-V): Use host.docker.internal:0.0
+      - DISPLAY=host.docker.internal:0.0
+      # Tell X11 where to find auth cookie
+      - XAUTHORITY=/home/ros/.Xauthority
+      - QT_X11_NO_MITSHM=1
+
+    volumes:
+      - /dev:/dev
+      # Named volume keeps build, install, and log files cached and fast
+      # FIX: Cache only the sub-folders, leaving /home/ros/ws root untouched
+      - laptop_build:/home/ros/ws/build
+      - laptop_install:/home/ros/ws/install
+      - laptop_log:/home/ros/ws/log
+      # My live code source maps on top
+      - ./source:/home/ros/ws/src
+      # Share the GUI
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      # MAP THE COOKIE: Mounts your host login's display permission token straight to the ros user's home folder
+      - ~/.Xauthority:/home/ros/.Xauthority:ro
+
   # Controller (operator-side dev)
   controller_dev:
     build:
@@ -24,7 +63,6 @@ services:
       # Which dockerfile section to use
       target: controller_dev
 
-      
     image: ros2-controller_dev:latest
     <<: [*ros-net, *device-access]
     stdin_open: true
@@ -44,7 +82,6 @@ services:
       - XAUTHORITY=/home/ros/.Xauthority
       - QT_X11_NO_MITSHM=1
 
-
     volumes:
       - /dev:/dev
       # Named volume keeps build, install, and log files cached and fast
@@ -54,7 +91,7 @@ services:
       - controller_log:/home/ros/ws/log
       # My live code source maps on top
       - ./source:/home/ros/ws/src
-      # Share the GUI 
+      # Share the GUI
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       # MAP THE COOKIE: Mounts your host login's display permission token straight to the ros user's home folder
       - ~/.Xauthority:/home/ros/.Xauthority:ro
@@ -64,17 +101,17 @@ services:
     build:
       context: .
       args: *build-args
-      target: robot_dev          # reuse the existing image, no new stage needed
+      target: robot_dev # reuse the existing image, no new stage needed
     image: ros2-robot_dev:latest
-    <<: *ros-net                 # keep DDS networking consistent with real robot_dev
+    <<: *ros-net # keep DDS networking consistent with real robot_dev
     stdin_open: true
     tty: true
     working_dir: /home/ros/ws
     user: ros
     environment:
       - ROS_DOMAIN_ID=42
-      - GPIOZERO_PIN_FACTORY=mock   # <- the key change: no real GPIO chip needed
-      - DISPLAY=${DISPLAY:-:0}      # for RViz2 / rqt if you visualize later
+      - GPIOZERO_PIN_FACTORY=mock # <- the key change: no real GPIO chip needed
+      - DISPLAY=${DISPLAY:-:0} # for RViz2 / rqt if you visualize later
     volumes:
       - robot_build:/home/ros/ws/build
       - robot_install:/home/ros/ws/install
@@ -102,8 +139,8 @@ services:
 
     # Add gpio group for gpiozero access
     group_add:
-      - "986" # For gpio access
-      - "44" # For camera access
+      - '986' # For gpio access
+      - '44' # For camera access
 
     environment:
       - ROS_DOMAIN_ID=42
@@ -124,7 +161,6 @@ services:
       - /run/udev:/run/udev
       - /run/dbus:/run/dbus
 
-
       # My live code source maps on top
       - ./source:/home/ros/ws/src
 
@@ -141,8 +177,8 @@ services:
     stdin_open: true
     tty: true
     group_add:
-      - "986" # For gpio access
-      - "44" # For camera
+      - '986' # For gpio access
+      - '44' # For camera
 
     # Placed inside the user's home directory
     working_dir: /home/ros/ws
@@ -161,12 +197,14 @@ services:
       - /run/udev:/run/udev
       - /run/dbus:/run/dbus
 
-
 volumes:
   controller_build:
   controller_install:
   controller_log:
-  # Cache 
+  # Cache
   robot_build:
   robot_install:
   robot_log:
+  laptop_build:
+  laptop_install:
+  laptop_log:

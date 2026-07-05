@@ -118,6 +118,25 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     && rm -rf /var/lib/apt/lists/*
 
 
+# ================== LAPTOP_DEV (for simulations) ======#
+FROM operator_base AS laptop_dev
+
+# Install simulation tools
+RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
+    --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get update && apt-get install -y --no-install-recommends \
+    ros-${ROS_DISTRO}-xacro \
+    ros-${ROS_DISTRO}-joint-state-publisher-gui \
+    git \
+    gdb \
+    vim \
+    && rm -rf /var/lib/apt/lists/*
+
+# Drop privileges:
+USER $USERNAME
+
+CMD ["/bin/bash"]
 # ================== CONTROLLER_DEV ==================== #
 
 FROM operator_base AS controller_dev
@@ -130,11 +149,9 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     gdb \
     vim \
     && rm -rf /var/lib/apt/lists/*
-    
+
 # Drop privileges:
 USER $USERNAME
-
-# Install Pi-Specific tools...
 
 CMD ["/bin/bash"]
 
