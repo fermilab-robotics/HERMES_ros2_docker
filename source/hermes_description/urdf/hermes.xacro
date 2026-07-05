@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<robot name="hermes" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="materials.xacro" />
+<xacro:include filename="inertial_macros.xacro" />
+
+<!-- CHASSIS PARAMETERS -->
+<xacro:property name="chassis_width" value="0.3" />
+<xacro:property name="chassis_length" value="0.4" />
+<xacro:property name="chassis_height" value="0.15" />
+
+<!-- WHEEL PARAMETERS -->
+<xacro:property name="wheel_radius" value="0.05" />
+<xacro:property name="wheel_length" value="0.03" />
+
+<!--MASSES IN KG-->
+<xacro:property name="wheel_mass" value="0.08" />
+<xacro:property name="chassis_mass" value="4" />
+
+<!-- How far the wheel is from the body of the robot -->
+<xacro:property name="wheel_offset" value="0.01" />
+
+<!-- BASE LINK -->
+<link name="base_link">
+
+</link>
+
+<!-- CHASSIS LINK -->
+
+<joint name="chassis_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="chassis" />
+    <!-- Move origin to back of robot -->
+    <origin xyz="-${chassis_length/2} 0 0" />
+</joint> 
+
+<link name="chassis">
+    <visual>
+        <origin xyz="${chassis_length/2} 0 ${chassis_height/2}" />
+        <geometry>
+            <box size="${chassis_length} ${chassis_width} ${chassis_height}" />
+        </geometry>
+        <material name="orange" />
+    </visual>
+    <collision>
+        <origin xyz="${chassis_length/2} 0 ${chassis_height/2}" />
+        <geometry>
+            <box size="${chassis_length} ${chassis_width} ${chassis_height}" />
+        </geometry>
+    </collision>
+    <xacro:inertial_box mass="${chassis_mass}" x="${chassis_length}" y="${chassis_width}" z="${chassis_height}">
+        <origin xyz="${chassis_length/2} 0 ${chassis_height/2}" rpy="0 0 0"/>
+    </xacro:inertial_box>
+</link>
+
+<!-- WHEEL LINK -->
+ 
+<xacro:macro name="wheel" params="prefix_side prefix_position position_offset reflect">
+    <joint name="${prefix_side}_${prefix_position}_wheel_joint" type="continuous">
+        <parent link="base_link" />
+        <child link="${prefix_side}_${prefix_position}_wheel" />
+        <!-- rpy is so that we can rotate the wheel along the X axis, because cylinders by default are oriented z-up -->
+        <origin xyz="${position_offset} ${reflect * (chassis_width/2 + wheel_length / 2 +  wheel_offset) } 0" rpy="${-reflect*pi/2} 0 0" />
+        <axis xyz="0 0 ${reflect}" />
+    </joint>
+
+    <link name="${prefix_side}_${prefix_position}_wheel">
+        <visual>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_length}" />
+            </geometry>
+            <material name="black" />
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_length}" />
+            </geometry>
+        </collision>
+        <xacro:inertial_cylinder mass="${wheel_mass}" length="${wheel_length}" radius="${wheel_radius}">
+            <origin xyz="0 0 0" rpy="0 0 0" />
+        </xacro:inertial_cylinder>
+
+    </link>
+</xacro:macro>
+
+<!-- LEFT WHEEL -->
+<xacro:wheel prefix_side="left" prefix_position="rear" position_offset="-0.15" reflect="1" />
+<xacro:wheel prefix_side="left" prefix_position="middle" position_offset="0" reflect="1" />
+<xacro:wheel prefix_side="left" prefix_position="front" position_offset="0.15" reflect="1" />
+
+
+<!-- RIGHT WHEEL -->
+<xacro:wheel prefix_side="right" prefix_position="rear" position_offset="-0.15" reflect="-1" />
+<xacro:wheel prefix_side="right" prefix_position="middle" position_offset="0" reflect="-1" />
+<xacro:wheel prefix_side="right" prefix_position="front" position_offset="0.15" reflect="-1" />
+
+</robot>
