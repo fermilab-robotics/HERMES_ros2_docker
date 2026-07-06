@@ -2,19 +2,12 @@
 <CycloneDDS>
     <Domain>
         <General>
-            <!-- Had this because Linux Laptop would keep trying to yell down ethernet port instead of Wi-Fi
             <Interfaces>
                 <NetworkInterface name="wlan0"/>
             </Interfaces>
-            -->
+
             <AllowMulticast>false</AllowMulticast>
             <EnableMulticastLoopback>true</EnableMulticastLoopback>
         </General>
     </Domain>
-    <Discovery>
-        <Peers>
-            <Peer address="10.42.0.43" />
-            <Peer address="10.42.0.1" />
-        </Peers>
-    </Discovery>
 </CycloneDDS>
