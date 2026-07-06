@@ -2,7 +2,7 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 
 # To use .yaml files:
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, LogInfo
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -37,6 +37,8 @@ def generate_launch_description():
 
     # Add argument to launch description
     ld.add_action(config_file_arg)
+    # for debugging
+    ld.add_action(LogInfo(msg=config_path))
 
 
     motor_driver_node = Node(

@@ -1,4 +1,6 @@
 from setuptools import find_packages, setup
+from glob import glob
+import os
 
 package_name = 'my_bringup'
 
@@ -10,14 +12,8 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch', [
-            'launch/client_launch.py',
-            'launch/server_launch.py',
-        ]),
-        ('share/' + package_name + '/config', [
-            'config/hermes_launch.yaml',
-            'config/rvr_launch.yaml',
-        ])
+        (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.py')),
+        (os.path.join('share', package_name, 'config'), glob('config/*.yaml')),
     ],
     package_data={'': ['py.typed']},
     install_requires=['setuptools'],
