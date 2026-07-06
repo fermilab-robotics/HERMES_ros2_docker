@@ -26,6 +26,10 @@ ARG USERNAME=ros
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
+# Workspace name
+ARG WORKSPACE_NAME=ws
+ENV WORKSPACE_NAME=${WORKSPACE_NAME}
+
 # Delete user if it exists in container (e.g Ubuntu Noble: ubuntu)
 RUN if id -u $USER_UID ; then userdel `id -un $USER_UID` ; fi
 
@@ -76,13 +80,13 @@ ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USERNAME}/.bashrc
 
 # Setup ROS2 workspace
-WORKDIR /home/${USERNAME}/ws
+WORKDIR /home/${USERNAME}/${WORKSPACE_NAME}
 
 # Pre-create workspace dirs and give ownership to the non-root user.
 # This is critical: if these dirs are root-owned at runtime, colcon build
 # fails unless you sudo chown manually.
 RUN mkdir -p build install log \
-    && chown -R ${USER_UID}:${USER_GID} /home/${USERNAME}/ws
+    && chown -R ${USER_UID}:${USER_GID} /home/${USERNAME}/${WORKSPACE_NAME}
 
 COPY entrypoint.sh /entrypoint.sh
 RUN ["chmod", "+x", "/entrypoint.sh"]
@@ -109,7 +113,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     && rm -rf /var/lib/apt/lists/*
 
 # ROOT user: Temperarily bind code to let rosdep scan and install dependencies
-RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
+RUN --mount=type=bind,source=source,target=/home/ros/${WORKSPACE_NAME}/src \
     --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update \
@@ -167,7 +171,7 @@ CMD ["ros2", "topic", "echo", "/camera/camera/color/image_raw"]
 FROM base AS robot_base
 
 # Copy the hardware manifest into the container
-WORKDIR /home/ros/ws
+WORKDIR /home/ros/${WORKSPACE_NAME}
 
 # Fetch third-party hardware driver source (e.g. realsense-ros) via vcstool.
 # NOTE: this must land in a plain directory, NOT the --mount=type=bind path
@@ -215,17 +219,17 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     && rm -rf /var/lib/apt/lists/*
 
 RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release" \
-    && echo "source /home/ros/ws/install/local_setup.bash" >> /home/ros/.bashrc
+    && echo "source /home/ros/${WORKSPACE_NAME}/install/local_setup.bash" >> /home/ros/.bashrc
 
 
 # Temperarily bind code to let rosdep scan and install dependencies
 # Note: the docker mount overwrites the src folder
-RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
+RUN --mount=type=bind,source=source,target=/home/ros/${WORKSPACE_NAME}/src \
     # Cache
     --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update \
-    && rosdep install -y --ignore-src --from-paths /home/ros/ws/src \
+    && rosdep install -y --ignore-src --from-paths /home/ros/${WORKSPACE_NAME}/src \
     # Do NOT install these two packages, as they are not compatible with the Pi5 and will break the build.
     # Do not install librealsense2 (cloning realsense from source)
     --skip-keys="python3-lgpio python3-gpiozero librealsense2 realsense2_camera" \

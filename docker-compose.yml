@@ -29,7 +29,7 @@ services:
     privileged: true # Needed for PIO access
     tty: true
     # Placed inside the user's home directory
-    working_dir: /home/ros/ws
+    working_dir: /home/ros/${WORKSPACE_NAME}
     user: ros
 
     environment:
@@ -45,11 +45,11 @@ services:
       - /dev:/dev
       # Named volume keeps build, install, and log files cached and fast
       # FIX: Cache only the sub-folders, leaving /home/ros/ws root untouched
-      - laptop_build:/home/ros/ws/build
-      - laptop_install:/home/ros/ws/install
-      - laptop_log:/home/ros/ws/log
+      - laptop_build:/home/ros/${WORKSPACE_NAME}/build
+      - laptop_install:/home/ros/${WORKSPACE_NAME}/install
+      - laptop_log:/home/ros/${WORKSPACE_NAME}/log
       # My live code source maps on top
-      - ./source:/home/ros/ws/src
+      - ./source:/home/ros/${WORKSPACE_NAME}/src
       # Share the GUI
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       # MAP THE COOKIE: Mounts your host login's display permission token straight to the ros user's home folder
@@ -69,7 +69,7 @@ services:
     privileged: true # Needed for PIO access
     tty: true
     # Placed inside the user's home directory
-    working_dir: /home/ros/ws
+    working_dir: /home/ros/${WORKSPACE_NAME}
     user: ros
 
     environment:
@@ -86,11 +86,11 @@ services:
       - /dev:/dev
       # Named volume keeps build, install, and log files cached and fast
       # FIX: Cache only the sub-folders, leaving /home/ros/ws root untouched
-      - controller_build:/home/ros/ws/build
-      - controller_install:/home/ros/ws/install
-      - controller_log:/home/ros/ws/log
+      - controller_build:/home/ros/${WORKSPACE_NAME}/build
+      - controller_install:/home/ros/${WORKSPACE_NAME}/install
+      - controller_log:/home/ros/${WORKSPACE_NAME}/log
       # My live code source maps on top
-      - ./source:/home/ros/ws/src
+      - ./source:/home/ros/${WORKSPACE_NAME}/src
       # Share the GUI
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       # MAP THE COOKIE: Mounts your host login's display permission token straight to the ros user's home folder
@@ -106,17 +106,17 @@ services:
     <<: *ros-net # keep DDS networking consistent with real robot_dev
     stdin_open: true
     tty: true
-    working_dir: /home/ros/ws
+    working_dir: /home/ros/${WORKSPACE_NAME}
     user: ros
     environment:
       - ROS_DOMAIN_ID=42
       - GPIOZERO_PIN_FACTORY=mock # <- the key change: no real GPIO chip needed
       - DISPLAY=${DISPLAY:-:0} # for RViz2 / rqt if you visualize later
     volumes:
-      - robot_build:/home/ros/ws/build
-      - robot_install:/home/ros/ws/install
-      - robot_log:/home/ros/ws/log
-      - ./source:/home/ros/ws/src
+      - robot_build:/home/ros/${WORKSPACE_NAME}/build
+      - robot_install:/home/ros/${WORKSPACE_NAME}/install
+      - robot_log:/home/ros/${WORKSPACE_NAME}/log
+      - ./source:/home/ros/${WORKSPACE_NAME}/src
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ~/.Xauthority:/home/ros/.Xauthority:ro
 
@@ -133,7 +133,7 @@ services:
     stdin_open: true
     tty: true
     # Placed inside the user's home directory
-    working_dir: /home/ros/ws
+    working_dir: /home/ros/${WORKSPACE_NAME}
     privileged: true
     user: ros
 
@@ -149,20 +149,22 @@ services:
       - DISPLAY=${DISPLAY:-:0}
       # For camera
       - UDEV=1
+      # For lidar:
+      - LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/home/ros/${WORKSPACE_NAME}/build/ld_lidar
 
     volumes:
       # Named volume keeps build, install, and log files cached and fast
-      # Cache build/ install/ log/ as named volumes, but NEVER mount a named volume over ~/ws/src, it shadows the ./source bind mount with stale/empty content.
-      - robot_build:/home/ros/ws/build
-      - robot_install:/home/ros/ws/install
-      - robot_log:/home/ros/ws/log
+      # Cache build/ install/ log/ as named volumes, but NEVER mount a named volume over ~/${WORKSPACE_NAME}/src, it shadows the ./source bind mount with stale/empty content.
+      - robot_build:/home/ros/${WORKSPACE_NAME}/build
+      - robot_install:/home/ros/${WORKSPACE_NAME}/install
+      - robot_log:/home/ros/${WORKSPACE_NAME}/log
       # For camera access
       - /dev:/dev
       - /run/udev:/run/udev
       - /run/dbus:/run/dbus
 
       # My live code source maps on top
-      - ./source:/home/ros/ws/src
+      - ./source:/home/ros/${WORKSPACE_NAME}/src
 
   robot_prod:
     build:
@@ -181,7 +183,7 @@ services:
       - '44' # For camera
 
     # Placed inside the user's home directory
-    working_dir: /home/ros/ws
+    working_dir: /home/ros/${WORKSPACE_NAME}
     privileged: true
     user: ros
     restart: unless-stopped
