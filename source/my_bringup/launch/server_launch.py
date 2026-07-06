@@ -69,7 +69,6 @@ def generate_launch_description():
 
     # Add nodes to launch description
     ld.add_action(motor_driver_node)
-    ld.add_action(realsense_node)
     ld.add_action(realsense_launch)
 
     return ld
