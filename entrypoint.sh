@@ -7,7 +7,10 @@ set -e
 source /opt/ros/$ROS_DISTRO/setup.bash
 
 # Source the underlay workspace (External repos)
-source ${UNDERLAY_WS}/install/local_setup.bash
+# IF the string UNDERLAY_WS is NOT empty (e.g. we are in the robot_dev stage AND if the local_setup.bash file exists, then source it )
+if [ -n "${UNDERLAY_WS}" ] && [ -f "${UNDERLAY_WS}/install/local_setup.bash" ]; then
+  source "${UNDERLAY_WS}/install/local_setup.bash"
+fi
 
 # Source the base workspace environment, if built
 if [ -f /home/ros/ws/install/setup.bash ]; then
