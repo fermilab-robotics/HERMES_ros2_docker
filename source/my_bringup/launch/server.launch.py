@@ -20,10 +20,11 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     # Create a dynamic (future) object that will have value at runtime
-    config_file = LaunchConfiguration('config_file')
+    config_file = LaunchConfiguration('bringup_config_file')
 
+    # Note: our launch argument cannot conflct with realsense2_camear's launch file
     config_file_arg = DeclareLaunchArgument(
-        'config_file',
+        'bringup_config_file',
         default_value='hermes_launch.yaml',
         description="Which configuartion YAML to load (hermes_launch or rvr_launch)"
     )

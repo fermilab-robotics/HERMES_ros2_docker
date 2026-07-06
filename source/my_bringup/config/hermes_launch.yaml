@@ -5,7 +5,3 @@ motor_driver_subscriber:
 
 realsense2_camera_node:
   ros__parameters:
-    
-    
-
-
