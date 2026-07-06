@@ -11,6 +11,9 @@
     # Inspired the rm -rf /var/lib/apt/lists/* cleanup after apt-get install.
     # Link: https://github.com/althack/dockerfiles/blob/main/ros2/lyrical.Dockerfile
 
+# 3. RoboticsSeaBass Guide to docker and ROS2 - overlay and underlay pattern:
+# https://roboticseabass.com/2023/07/09/updated-guide-docker-and-ros2/
+
 # The version of ROS2 to use.
 ARG ROS_DISTRO=jazzy
 
@@ -170,19 +173,17 @@ CMD ["ros2", "topic", "echo", "/camera/camera/color/image_raw"]
 # ================= ROBOT BASE ====================== #
 FROM base AS robot_base
 
-# Copy the hardware manifest into the container
-WORKDIR /home/ros/${WORKSPACE_NAME}
+# Underlay workspace -- third party hardware driver source
+ARG UNDERLAY_WS=/opt/underlay_ws
+ENV UNDERLAY_WS=${UNDERLAY_WS}
+
+WORKDIR ${UNDERLAY_WS}
 
 # Fetch third-party hardware driver source (e.g. realsense-ros) via vcstool.
-# NOTE: this must land in a plain directory, NOT the --mount=type=bind path
-# used below for the user's own source. A build-time bind mount only exists
-# for the single RUN instruction it's attached to -- anything vcs writes into
-# it (like a fresh clone) disappears once that RUN ends. Cloning here instead
-# is a normal COPY/RUN layer, so it's permanently baked into the image.
 COPY hardware.repos /tmp/hardware.repos
 RUN mkdir -p src/vendor && vcs import --recursive src/vendor < /tmp/hardware.repos
 
-# Install hardware interface libraries
+# Install hardware interface libraries needed for vendor drivers
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
@@ -206,21 +207,25 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     ros-${ROS_DISTRO}-librealsense2* \
     && rm -rf /var/lib/apt/lists/*
 
-# Resolve realsense-ros's own dependencies and build it into the image now.
-# src/vendor is a real layer (not bind-mounted), so this persists -- robot_dev
-# won't need to rebuild it just because the user's own ./source is mounted
+# Resolve realsense-ros's own dependencies and build the underlay now.
 # on top of src/ later.
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
     python3-colcon-common-extensions \
     # -r means that the rosdep still succeeds even if one package didn't
-    && rosdep install -y --ignore-src -r --from-paths src/vendor \
+    && rosdep install -y --ignore-src -r --from-paths src \
     && rm -rf /var/lib/apt/lists/*
 
 RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release" \
-    && echo "source /home/ros/${WORKSPACE_NAME}/install/local_setup.bash" >> /home/ros/.bashrc
+    && chown -R ros:ros ${UNDERLAY_WS} \
+    && echo "source ${UNDERLAY_WS}/install/local_setup.bash" >> /home/ros/.bashrc \
+    # Overlay hasn't been built yet at image-build time 
+    && echo '[ -f /home/ros/${WORKSPACE_NAME}/install/local_setup.bash ] && source /home/ros/${WORKSPACE_NAME}/install/local_setup.bash' >> /home/ros/.bashrc
 
+
+# Overlay workspace - our own packages under src/
+WORKDIR /home/ros/${WORKSPACE_NAME}
 
 # Temperarily bind code to let rosdep scan and install dependencies
 # Note: the docker mount overwrites the src folder
