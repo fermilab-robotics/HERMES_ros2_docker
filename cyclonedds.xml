@@ -2,11 +2,10 @@
 <CycloneDDS>
     <Domain>
         <General>
-            <Interfaces>
-                <NetworkInterface name="wlan0"/>
-            </Interfaces>
-
-            <AllowMulticast>false</AllowMulticast>
+            
+            <!-- Matches subnet, not interface name -->
+            <NetworkInterfaceAddress>10.42.0.0/24</NetworkInterfaceAddress>
+            <AllowMulticast>true</AllowMulticast>
             <EnableMulticastLoopback>true</EnableMulticastLoopback>
         </General>
     </Domain>
