@@ -211,8 +211,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     && rosdep install -y --ignore-src --from-paths src/vendor \
     && rm -rf /var/lib/apt/lists/*
 
-RUN . /opt/ros/${ROS_DISTRO}/setup.bash \
-    && colcon build --symlink-install
+RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && colcon build --symlink-install"
 
 
 # Temperarily bind code to let rosdep scan and install dependencies
