@@ -176,7 +176,7 @@ WORKDIR /home/ros/ws
 # it (like a fresh clone) disappears once that RUN ends. Cloning here instead
 # is a normal COPY/RUN layer, so it's permanently baked into the image.
 COPY hardware.repos /tmp/hardware.repos
-RUN mkdir -p src/vendor && vcs import src/vendor < /tmp/hardware.repos
+RUN mkdir -p src/vendor && vcs import --recursive src/vendor < /tmp/hardware.repos
 
 # Install hardware interface libraries
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
@@ -184,6 +184,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     liblgpio-dev \
+     # for lidar:
+    libudev-dev \
     # Note, we need to use the pip gpiozero
     swig \
     python3-dev \
@@ -191,7 +193,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     && pip3 install --upgrade lgpio gpiozero --break-system-packages \
     && rm -rf /var/lib/apt/lists/*
 
-
+# Note
 # Install ROS2 dependencies:
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
@@ -208,10 +210,12 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
     python3-colcon-common-extensions \
-    && rosdep install -y --ignore-src --from-paths src/vendor \
+    # -r means that the rosdep still succeeds even if one package didn't
+    && rosdep install -y --ignore-src -r --from-paths src/vendor \
     && rm -rf /var/lib/apt/lists/*
 
-RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && colcon build --symlink-install"
+RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release" \
+    && echo "source /home/ros/ws/install/local_setup.bash" >> /home/ros/.bashrc
 
 
 # Temperarily bind code to let rosdep scan and install dependencies
@@ -229,6 +233,7 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
 
 
 # ================= ROBOT DEV ====================== #
+# Eventually: this should be hermes_dev
 FROM robot_base AS robot_dev
 
 # Note: We must have permissions to be able to do this, so we need to run as root for this step. We can drop privileges later.
