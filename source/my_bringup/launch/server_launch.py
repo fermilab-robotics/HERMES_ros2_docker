@@ -60,7 +60,7 @@ def generate_launch_description():
     # realsense node
     realsense_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(realsense_dir, 'launch', 'launch_rs.py')
+            os.path.join(realsense_dir, 'launch', 'rs_launch.py')
         ),
         launch_arguments={
             'enable_color': 'true',
