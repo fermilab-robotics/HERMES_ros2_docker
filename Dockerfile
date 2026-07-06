@@ -178,7 +178,7 @@ WORKDIR ${UNDERLAY_WS}
 
 # Fetch third-party hardware driver source (e.g. realsense-ros) via vcstool.
 COPY hardware.repos /tmp/hardware.repos
-RUN mkdir -p src/vendor && vcs import --recursive src/vendor < /tmp/hardware.repos
+RUN mkdir -p src && vcs import --recursive src < /tmp/hardware.repos
 
 # Install hardware interface libraries needed for vendor drivers
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
