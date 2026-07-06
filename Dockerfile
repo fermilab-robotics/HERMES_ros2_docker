@@ -69,8 +69,9 @@ RUN rosdep init || true \
 COPY config/ /site_config/
 
 # DDS config
+# Comment out copy for DEV
 # COPY cyclonedds.xml /cyclonedds.xml
-# ENV CYCLONEDDS_URI="file:///cyclonedds.xml"
+ENV CYCLONEDDS_URI="file:///cyclonedds.xml"
 
 # Set environment variables
 # Tell ROS 2 to use Cyclone as the default middleware
