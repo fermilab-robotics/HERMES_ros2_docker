@@ -18,6 +18,15 @@ def generate_launch_description():
     # create a launch description object
     ld = LaunchDescription()
 
+    rqt_image_view_node = Node(
+        package='rqt_image_view',
+        executable='rqt_image_view',
+        name='rqt_image_view',
+        output='screen'
+    )
+
+    ld.add_action(rqt_image_view_node)
+
     # Find the teleop_twist_joy launch file
     teleop_twist_joy_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(

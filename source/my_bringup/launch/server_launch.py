@@ -50,16 +50,20 @@ def generate_launch_description():
 
     # ld.add_action(camera_node)
 
+    realsense_dir = get_package_share_directory('realsense2_camera')
     # realsense node
-    realsense_node = Node(
-        package='realsense2_camera',
-        executable='realsense2_camera_node',
-        name='realsense2_camera_node',
-        parameters=[config_path]
+    realsense_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(realsense_dir, 'launch', 'launch_rs.py')
+        ),
+        launch_arguments={
+            'enable_color': 'true',
+        }.items()
     )
 
     # Add nodes to launch description
     ld.add_action(motor_driver_node)
     ld.add_action(realsense_node)
-    
+    ld.add_action(realsense_launch)
+
     return ld
