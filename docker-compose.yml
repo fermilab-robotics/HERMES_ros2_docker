@@ -54,6 +54,8 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       # MAP THE COOKIE: Mounts your host login's display permission token straight to the ros user's home folder
       - ~/.Xauthority:/home/ros/.Xauthority:ro
+      - ./cyclonedds.xml:/cyclonedds.xml:ro
+
 
   # Controller (operator-side dev)
   controller_dev:
@@ -95,6 +97,7 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       # MAP THE COOKIE: Mounts your host login's display permission token straight to the ros user's home folder
       - ~/.Xauthority:/home/ros/.Xauthority:ro
+      - ./cyclonedds.xml:/cyclonedds.xml:ro
 
   # For simulating the robot
   robot_sim:
@@ -119,6 +122,8 @@ services:
       - ./source:/home/ros/ws/src
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ~/.Xauthority:/home/ros/.Xauthority:ro
+      - ./cyclonedds.xml:/cyclonedds.xml:ro
+
 
   robot_dev:
     build:
@@ -165,6 +170,8 @@ services:
 
       # My live code source maps on top
       - ./source:/home/ros/ws/src
+      - ./cyclonedds.xml:/cyclonedds.xml:ro
+
 
   robot_prod:
     build:
@@ -198,6 +205,8 @@ services:
       # For camera access
       - /run/udev:/run/udev
       - /run/dbus:/run/dbus
+
+      - ./cyclonedds.xml:/cyclonedds.xml:ro
 
 volumes:
   controller_build:
