@@ -117,10 +117,11 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update \
-    && rosdep install -y --ignore-src --from-paths src \
+    && rosdep install -y --ignore-src --from-paths src --skip-keys="ros_gz ros_gz_sim ros_gz_bridge ros_gz_bridge rviz2" \
     && rm -rf /var/lib/apt/lists/*
 
-
+# TODO: Make skip keys standard for controller and robot
+# OR: USE condition="..." in package.xml
 # ================== LAPTOP_DEV (for simulations) ======#
 FROM operator_base AS laptop_dev
 
@@ -234,7 +235,7 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     && rosdep install -y --ignore-src --from-paths /home/ros/ws/src \
     # Do NOT install these two packages, as they are not compatible with the Pi5 and will break the build.
     # Do not install librealsense2 (cloning realsense from source)
-    --skip-keys="python3-lgpio python3-gpiozero librealsense2 realsense2_camera" \
+    --skip-keys="python3-lgpio python3-gpiozero librealsense2 realsense2_camera ros_gz ros_gz_sim ros_gz_bridge ros_gz_bridge rviz2" \
     && rm -rf /var/lib/apt/lists/*
 
 
