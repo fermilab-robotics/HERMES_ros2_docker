@@ -3,9 +3,15 @@
     <Domain>
         <General>
             
-            <!-- Matches subnet, not interface name .. .where does this number come from? -->
+            <!-- Matches  interface name .. .where does this number come from? -->
+            <!-- presence_required so it doesn't fail andcrash if it doesn't find one-->
             <Interfaces>
-                <NetworkInterface address="10.42.0.0" />
+                <!-- For Pi -->
+                <NetworkInterface name="wlan0" priority="default" multicast="default" presence_required="false"/>
+                <!-- Pi Wifi Adapter-->
+                <NetworkInterface name="wlan1" priority="default" multicast="default" presence_required="false"/>
+                <!-- For thinkpad-->
+                <NetworkInterface name="wlp4s0" priority="default" multicast="default" presence_required="false"/>
             </Interfaces>
             <AllowMulticast>true</AllowMulticast>
             <EnableMulticastLoopback>true</EnableMulticastLoopback>
