@@ -12,36 +12,30 @@ A video showcasing the software on Hermes and RVR will be available soon.
 
 The system architecture is depicted in the following graphic:
 
-
 ## Getting started
 
 [Getting Started](doc/getting_started.md)
 Information about the docker workspace:
 
 ## Laptop Setup
+
 Install Docker Engine:
-
-
 
 If Linux:
 Enable GUI programs outsied container:
 xhost +
 
+Remember to change display output to whatever works
+
 Use Dev Container extension in VSCODE:
 -> Select: existing dockerfile exists
 
 OR:
-use: 
-docker compose up -d 
+use:
+docker compose up -d
 docker
 
-
-
-
-
-
 ## Troubleshooting
-
 
 ### Connection issues
 
@@ -52,24 +46,17 @@ Check if the laptop can contact the Pi:
 
 View what interface the messages are being sent to:
 
-
-
 ### Device issues in Docker Container:
 
 xhost +
 -> check priviliged status of docker container
 
-
-
-
 (TODO: CycloneDDS config)
 
 ### SD Card Space issues:
-Run `docker builder prune -a -f` on the pi to clear the disk  from time-to-time
 
-
+Run `docker builder prune -a -f` on the pi to clear the disk from time-to-time
 
 ## Adding a new feature
-
 
 ## TODO: Add to docs - about CI/CD multiple targets

@@ -1,59 +1,45 @@
-<?xml version="1.0" ?>
-<robot name="hermes" xmlns:xacro="http://www.ros.org/wiki/xacro" >
+<?xml version="1.0"?>
 
-<xacro:property name="body_color" value="Gazebo/Silver" />
+<robot name="hermes" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:include filename="hermes_parameters.xacro" />
 
-<gazebo>
-  <plugin name="control" filename="libgazebo_ros_control.so"/>
-</gazebo>
-<gazebo reference="base_link">
-  <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <self_collide>true</self_collide>
-  <gravity>true</gravity>
-</gazebo>
+    <gazebo>
+        <plugin name="gz::sim::systems::DiffDrive" filename="gz-sim-diff-drive-system">
+                <!-- Wheel information -->
+                <left_joint>left_front_wheel_joint</left_joint>
+                <left_joint>left_middle_wheel_joint</left_joint>
+                <left_joint>left_rear_wheel_joint</left_joint>
+                <right_joint>right_front_wheel_joint</right_joint>
+                <right_joint>right_middle_wheel_joint</right_joint>
+                <right_joint>right_rear_wheel_joint</right_joint>
 
-<gazebo reference="old_component__2__1">
-  <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <self_collide>true</self_collide>
-</gazebo>
+                <wheel_separation>${chassis_width + wheel_offset*2}</wheel_separation>
+                <wheel_radius>${wheel_radius}</wheel_radius>
 
-<gazebo reference="old_component__3__1">
-  <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <self_collide>true</self_collide>
-</gazebo>
+                <!-- Limits -->
+                <max_angular_acceleration>200</max_angular_acceleration>
+                <max_linear_acceleration>10.0</max_linear_acceleration>
 
-<gazebo reference="old_component__4__1">
-  <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <self_collide>true</self_collide>
-</gazebo>
+                <!-- Output -->
+                 <frame_id>odom</frame_id>
+                 <odom_topic>odom</odom_topic>
+                 <tf_topic>tf</tf_topic>
 
-<gazebo reference="old_component__7__1">
-  <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <self_collide>true</self_collide>
-</gazebo>
+                 <!-- The topic this system will receive velocity messages from-->
+                 <topic>cmd_vel</topic>
 
-<gazebo reference="old_component__6__1">
-  <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <self_collide>true</self_collide>
-</gazebo>
+                 <!-- The base fram of the robot -->
+                 <child_frame_id>base_link</child_frame_id>
 
-<gazebo reference="old_component__5__1">
-  <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <self_collide>true</self_collide>
-</gazebo>
+        </plugin>
+        <!-- Publish joint states to gz -->
+        <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+            <topic>joint_states</topic>
+        </plugin>
+        <!-- Needed for any rendering sensors (lidar, camera) attached to this model -->
+        <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+            <render_engine>ogre2</render_engine>
+        </plugin>
+    </gazebo>
 
 </robot>

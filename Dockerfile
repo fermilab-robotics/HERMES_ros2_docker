@@ -45,8 +45,6 @@ RUN apt-get update \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
     && rm -rf /var/lib/apt/lists/*
 
-# Possibly... might need to remove old gpg key and update for ROS2?
-
 # Install basic apt packages
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -105,6 +103,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     evtest \
     jstest-gtk \
     python3-serial \
+    ros-${ROS_DISTRO}-image-transport-plugins \
     ros-${ROS_DISTRO}-image-view \
     ros-${ROS_DISTRO}-teleop-twist-keyboard \
     && rm -rf /var/lib/apt/lists/*
@@ -122,12 +121,14 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
 FROM operator_base AS laptop_dev
 
 # Install simulation tools
-RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
-    --mount=type=cache,target=/var/cache/apt,sharing=locked \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-xacro \
     ros-${ROS_DISTRO}-joint-state-publisher-gui \
+    ros-${ROS_DISTRO}-ros-gz \
+    ros-${ROS_DISTRO}-rviz2 \
+    ros-${ROS_DISTRO}-rqt* \
     git \
     gdb \
     vim \
@@ -141,8 +142,7 @@ CMD ["/bin/bash"]
 
 FROM operator_base AS controller_dev
 
-RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
-    --mount=type=cache,target=/var/cache/apt,sharing=locked \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
     git \
@@ -154,12 +154,6 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
 USER $USERNAME
 
 CMD ["/bin/bash"]
-
-
-
-# CMD ["ros2", "run", "image_view", "image_view", "--ros-args", "-p", "image:=/camera/camera/color/image_raw"]
-# for Controller prod:
-# CMD ["ros2", "launch", "controller_bringup", "controller_launch.py"]
 
 # ================= CONTROLLER_PROD ==================== #
 FROM operator_base AS controller_prod
@@ -175,11 +169,14 @@ FROM base AS robot_base
 # Copy the hardware manifest into the container
 WORKDIR /home/ros/ws
 
-# TODO: Later add vcstool
-# COPY hardware.repos /tmp/hardware.repos
-
-# Use vcstool to dynamically clone the hardware repos into source/
-# RUN mkdir -p source && vcs import source < /tmp/hardware.repos
+# Fetch third-party hardware driver source (e.g. realsense-ros) via vcstool.
+# NOTE: this must land in a plain directory, NOT the --mount=type=bind path
+# used below for the user's own source. A build-time bind mount only exists
+# for the single RUN instruction it's attached to -- anything vcs writes into
+# it (like a fresh clone) disappears once that RUN ends. Cloning here instead
+# is a normal COPY/RUN layer, so it's permanently baked into the image.
+COPY hardware.repos /tmp/hardware.repos
+RUN mkdir -p src/vendor && vcs import src/vendor < /tmp/hardware.repos
 
 # Install hardware interface libraries
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
@@ -202,7 +199,21 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     ros-${ROS_DISTRO}-camera-ros \
     ros-${ROS_DISTRO}-librealsense2* \
     && rm -rf /var/lib/apt/lists/*
-    
+
+# Resolve realsense-ros's own dependencies and build it into the image now.
+# src/vendor is a real layer (not bind-mounted), so this persists -- robot_dev
+# won't need to rebuild it just because the user's own ./source is mounted
+# on top of src/ later.
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get update && apt-get install -y --no-install-recommends \
+    python3-colcon-common-extensions \
+    && rosdep install -y --ignore-src --from-paths src/vendor \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN . /opt/ros/${ROS_DISTRO}/setup.bash \
+    && colcon build --symlink-install
+
 
 # Temperarily bind code to let rosdep scan and install dependencies
 # Note: the docker mount overwrites the src folder

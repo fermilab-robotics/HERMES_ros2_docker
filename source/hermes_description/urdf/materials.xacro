@@ -13,4 +13,8 @@
     <color rgba="1.000 1.000 1.000 1.000" />
 </material>
 
+<material name="red">
+    <color rgba="1 0 0 1" />
+</material>
+
 </robot>

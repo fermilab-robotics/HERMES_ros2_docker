@@ -3,22 +3,7 @@
 
 <xacro:include filename="materials.xacro" />
 <xacro:include filename="inertial_macros.xacro" />
-
-<!-- CHASSIS PARAMETERS -->
-<xacro:property name="chassis_width" value="0.3" />
-<xacro:property name="chassis_length" value="0.4" />
-<xacro:property name="chassis_height" value="0.15" />
-
-<!-- WHEEL PARAMETERS -->
-<xacro:property name="wheel_radius" value="0.05" />
-<xacro:property name="wheel_length" value="0.03" />
-
-<!--MASSES IN KG-->
-<xacro:property name="wheel_mass" value="0.08" />
-<xacro:property name="chassis_mass" value="4" />
-
-<!-- How far the wheel is from the body of the robot -->
-<xacro:property name="wheel_offset" value="0.01" />
+<xacro:include filename="hermes_parameters.xacro" />
 
 <!-- BASE LINK -->
 <link name="base_link">
@@ -53,6 +38,12 @@
     </xacro:inertial_box>
 </link>
 
+<gazebo reference="chassis">
+    <material>Gazebo/Orange</material>
+    <mu1 value="0.001" />
+    <mu2 value="0.001" />
+</gazebo>
+
 <!-- WHEEL LINK -->
  
 <xacro:macro name="wheel" params="prefix_side prefix_position position_offset reflect">
@@ -81,6 +72,11 @@
         </xacro:inertial_cylinder>
 
     </link>
+    <gazebo reference="${prefix_side}_${prefix_position}_wheel">
+        <material>Gazebo/Black</material>
+        <mu1 value="0.2" />
+        <mu2 value="0.2" />
+    </gazebo>
 </xacro:macro>
 
 <!-- LEFT WHEEL -->

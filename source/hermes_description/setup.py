@@ -20,6 +20,10 @@ setup(
         (os.path.join('share', package_name, 'config'), glob('config/*')),
         # include meshes:
         (os.path.join('share', package_name, 'meshes'), glob('meshes/*')),
+        # include Gazebo worlds
+        (os.path.join('share', package_name, 'worlds'), glob('worlds/*')),
+        # include parameter bridge file
+        (os.path.join('share', package_name, 'parameters'), glob('parameters/*'))
     ],
     install_requires=['setuptools'],
     zip_safe=True,
