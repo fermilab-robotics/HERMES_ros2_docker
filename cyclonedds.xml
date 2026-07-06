@@ -3,8 +3,10 @@
     <Domain>
         <General>
             
-            <!-- Matches subnet, not interface name -->
-            <NetworkInterfaceAddress>10.42.0.0/24</NetworkInterfaceAddress>
+            <!-- Matches subnet, not interface name .. .where does this number come from? -->
+            <Interfaces>
+                <NetworkInterface address="10.42.0.0/24" />
+            </Interfaces>
             <AllowMulticast>true</AllowMulticast>
             <EnableMulticastLoopback>true</EnableMulticastLoopback>
         </General>
