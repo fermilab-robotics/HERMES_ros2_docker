@@ -7,6 +7,8 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.substitutions import FindPackageShare
 
+from ament_index_python.packages import get_package_share_directory
+
 def generate_launch_description():
     """Launch robot motor driver and camera feed with proper launch configuration"""
     # 
