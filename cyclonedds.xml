@@ -13,6 +13,8 @@
                 <!-- For thinkpad-->
                 <NetworkInterface name="wlp4s0" priority="default" multicast="default" presence_required="false"/>
             </Interfaces>
+            <!-- Restrict cyclonedds to specific interfaces -->
+            <DontRoute>true</DontRoute>
             <AllowMulticast>true</AllowMulticast>
             <EnableMulticastLoopback>true</EnableMulticastLoopback>
         </General>
