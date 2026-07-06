@@ -29,9 +29,6 @@ ARG USERNAME=ros
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-# Workspace name
-ARG WORKSPACE_NAME=ws
-ENV WORKSPACE_NAME=${WORKSPACE_NAME}
 
 # Delete user if it exists in container (e.g Ubuntu Noble: ubuntu)
 RUN if id -u $USER_UID ; then userdel `id -un $USER_UID` ; fi
@@ -83,13 +80,13 @@ ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USERNAME}/.bashrc
 
 # Setup ROS2 workspace
-WORKDIR /home/${USERNAME}/${WORKSPACE_NAME}
+WORKDIR /home/${USERNAME}/ws
 
 # Pre-create workspace dirs and give ownership to the non-root user.
 # This is critical: if these dirs are root-owned at runtime, colcon build
 # fails unless you sudo chown manually.
 RUN mkdir -p build install log \
-    && chown -R ${USER_UID}:${USER_GID} /home/${USERNAME}/${WORKSPACE_NAME}
+    && chown -R ${USER_UID}:${USER_GID} /home/${USERNAME}/ws
 
 COPY entrypoint.sh /entrypoint.sh
 RUN ["chmod", "+x", "/entrypoint.sh"]
@@ -116,7 +113,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     && rm -rf /var/lib/apt/lists/*
 
 # ROOT user: Temperarily bind code to let rosdep scan and install dependencies
-RUN --mount=type=bind,source=source,target=/home/ros/${WORKSPACE_NAME}/src \
+RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update \
@@ -221,20 +218,20 @@ RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && colcon build --sym
     && chown -R ros:ros ${UNDERLAY_WS} \
     && echo "source ${UNDERLAY_WS}/install/local_setup.bash" >> /home/ros/.bashrc \
     # Overlay hasn't been built yet at image-build time 
-    && echo '[ -f /home/ros/${WORKSPACE_NAME}/install/local_setup.bash ] && source /home/ros/${WORKSPACE_NAME}/install/local_setup.bash' >> /home/ros/.bashrc
+    && echo '[ -f /home/ros/ws/install/local_setup.bash ] && source /home/ros/ws/install/local_setup.bash' >> /home/ros/.bashrc
 
 
 # Overlay workspace - our own packages under src/
-WORKDIR /home/ros/${WORKSPACE_NAME}
+WORKDIR /home/ros/ws
 
 # Temperarily bind code to let rosdep scan and install dependencies
 # Note: the docker mount overwrites the src folder
-RUN --mount=type=bind,source=source,target=/home/ros/${WORKSPACE_NAME}/src \
+RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     # Cache
     --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update \
-    && rosdep install -y --ignore-src --from-paths /home/ros/${WORKSPACE_NAME}/src \
+    && rosdep install -y --ignore-src --from-paths /home/ros/ws/src \
     # Do NOT install these two packages, as they are not compatible with the Pi5 and will break the build.
     # Do not install librealsense2 (cloning realsense from source)
     --skip-keys="python3-lgpio python3-gpiozero librealsense2 realsense2_camera" \
