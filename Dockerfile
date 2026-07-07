@@ -204,6 +204,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     python3-pip \
     # critical: install compression plugins before building the underlay:
     ros-${ROS_DISTRO}-image-transport-plugins \
+    ros-${ROS_DISTRO}-compressed-image-transport \
     && pip3 install --upgrade lgpio gpiozero --break-system-packages \
     && rm -rf /var/lib/apt/lists/*
 
