@@ -154,8 +154,6 @@ services:
       - DISPLAY=${DISPLAY:-:0}
       # For camera
       - UDEV=1
-      # For lidar:
-      - LD_LIBRARY_PATH=/home/ros/ws/build/ld_lidar
 
     volumes:
       # Named volume keeps build, install, and log files cached and fast
