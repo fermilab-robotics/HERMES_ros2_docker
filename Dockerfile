@@ -113,6 +113,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     ros-${ROS_DISTRO}-image-view \
     ros-${ROS_DISTRO}-rqt-image-view  \
     ros-${ROS_DISTRO}-teleop-twist-keyboard \
+     # ROS2 control:
+    ros-${ROS_DISTRO}-ros2-control \
+    ros-${ROS_DISTRO}-ros2-controllers \
     && rm -rf /var/lib/apt/lists/*
 
 # ROOT user: Temperarily bind code to let rosdep scan and install dependencies
@@ -137,10 +140,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     ros-${ROS_DISTRO}-ros-gz \
     ros-${ROS_DISTRO}-rviz2 \
     ros-${ROS_DISTRO}-rqt* \
-    # ROS2 control:
-    ros-${ROS_DISTRO}-ros2-control \
-    ros-${ROS_DISTRO}-ros2-controllers \
-    # gazebo plugin
+
+    # gazebo ros2 control plugin
     ros-${ROS_DISTRO}-gz-ros2-control \
     git \
     gdb \
