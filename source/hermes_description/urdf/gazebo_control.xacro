@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:include filename="hermes_parameters.xacro" />
+
+    <gazebo>
+        <plugin name="gz::sim::systems::DiffDrive" filename="gz-sim-diff-drive-system">
+                <!-- Wheel information -->
+                <left_joint>left_front_wheel_joint</left_joint>
+                <left_joint>left_middle_wheel_joint</left_joint>
+                <left_joint>left_rear_wheel_joint</left_joint>
+                <right_joint>right_front_wheel_joint</right_joint>
+                <right_joint>right_middle_wheel_joint</right_joint>
+                <right_joint>right_rear_wheel_joint</right_joint>
+
+                <wheel_separation>${chassis_width + wheel_offset*2}</wheel_separation>
+                <wheel_radius>${wheel_radius}</wheel_radius>
+
+                <!-- Limits -->
+                <max_angular_acceleration>200</max_angular_acceleration>
+                <max_linear_acceleration>10.0</max_linear_acceleration>
+
+                <!-- Output -->
+                 <frame_id>odom</frame_id>
+                 <odom_topic>odom</odom_topic>
+                 <tf_topic>tf</tf_topic>
+
+                 <!-- The topic this system will receive velocity messages from-->
+                 <topic>cmd_vel</topic>
+
+                 <!-- The base fram of the robot -->
+                 <child_frame_id>base_link</child_frame_id>
+
+        </plugin>
+    </gazebo>
+</robot>

@@ -67,6 +67,7 @@ def generate_launch_description():
         ),
         launch_arguments={
             'enable_color': 'true',
+            'enable_image_transport_plugins': 'true'
         }.items()
     )
 
