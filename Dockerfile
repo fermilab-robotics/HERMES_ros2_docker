@@ -203,7 +203,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
-    ros-${ROS_DISTRO}-camera-ros \
+   #  ros-${ROS_DISTRO}-camera-ros \ - for Pi Cam
     ros-${ROS_DISTRO}-librealsense2* \
     && rm -rf /var/lib/apt/lists/*
 
