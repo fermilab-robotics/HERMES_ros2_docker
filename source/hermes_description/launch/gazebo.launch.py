@@ -63,14 +63,29 @@ def generate_launch_description():
     diff_drive_spawn_node = Node(
         package="controller_manager",
         executable="spawner.py",
-        argumenst=["diff_cont"]
+        arguments=["diff_cont"]
     )
 
     joint_broad_spawn_node = Node(
         package="controller_manager",
         executable="spawner.py",
-        argumenst=["joint_state_broadcaster"]
+        arguments=["joint_state_broadcaster"]
     )
+
+     # Code for delaying a node (I haven't tested how effective it is)
+    # 
+#     # First add the below lines to imports
+#     from launch.actions import RegisterEventHandler
+#     from launch.event_handlers import OnProcessExit
+    
+#    #  Then add the following below the current diff_drive_spawner
+#     delayed_diff_drive_spawner = RegisterEventHandler(
+#         event_handler=OnProcessExit(
+#             target_action=spawn_entity,
+#             on_exit=[diff_drive_spawn_node],
+#         )
+#     )
+
     # Very important so we can control the robot in gazebo from ROS2
     bridge_params = os.path.join(share_dir, 'parameters', 'bridge_parameters.yml')
 
