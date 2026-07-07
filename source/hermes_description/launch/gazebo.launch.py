@@ -59,6 +59,18 @@ def generate_launch_description():
         ]         
     )
 
+    # Diff_drive_spawner
+    diff_drive_spawn_node = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        argumenst=["diff_cont"]
+    )
+
+    joint_broad_spawn_node = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        argumenst=["joint_state_broadcaster"]
+    )
     # Very important so we can control the robot in gazebo from ROS2
     bridge_params = os.path.join(share_dir, 'parameters', 'bridge_parameters.yml')
 
@@ -98,5 +110,7 @@ def generate_launch_description():
         gazebo_sim,
         gz_bridge,
         urdf_spawn_node,
+        diff_drive_spawn_node,
+        joint_broad_spawn_node,
         image_compression_node
     ])
