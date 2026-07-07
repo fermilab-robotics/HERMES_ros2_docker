@@ -1,6 +1,7 @@
 from launch_ros.actions import Node
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable, RegisterEventHandler
+from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
@@ -75,17 +76,23 @@ def generate_launch_description():
      # Code for delaying a node (I haven't tested how effective it is)
     # 
 #     # First add the below lines to imports
-#     from launch.actions import RegisterEventHandler
-#     from launch.event_handlers import OnProcessExit
+    # from launch.actions import RegisterEventHandler
+    # from launch.event_handlers import OnProcessExit
     
-#    #  Then add the following below the current diff_drive_spawner
-#     delayed_diff_drive_spawner = RegisterEventHandler(
-#         event_handler=OnProcessExit(
-#             target_action=spawn_entity,
-#             on_exit=[diff_drive_spawn_node],
-#         )
-#     )
+   #  Then add the following below the current diff_drive_spawner
+    delayed_diff_drive_spawner = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=urdf_spawn_node,
+            on_exit=[diff_drive_spawn_node],
+        )
+    )
 
+    delayed_joint_broad_spawner = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=urdf_spawn_node,
+            on_exit=[joint_broad_spawn_node],
+        )
+    )
     # Very important so we can control the robot in gazebo from ROS2
     bridge_params = os.path.join(share_dir, 'parameters', 'bridge_parameters.yml')
 
@@ -125,7 +132,7 @@ def generate_launch_description():
         gazebo_sim,
         gz_bridge,
         urdf_spawn_node,
-        diff_drive_spawn_node,
-        joint_broad_spawn_node,
+        delayed_diff_drive_spawner,
+        delayed_joint_broad_spawner,
         image_compression_node
     ])
