@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 
+<!-- Contains all our plugins -->
 <robot name="hermes" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <gazebo>
@@ -11,6 +12,10 @@
         <!-- Needed for any rendering sensors (lidar, camera) attached to this model -->
         <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
             <render_engine>ogre2</render_engine>
+        </plugin>
+        <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+            <!-- Path to controller yaml -->
+            <parameters>$(find hermes_description)/config/my_controllers.yaml</parameters>
         </plugin>
     </gazebo>
 
