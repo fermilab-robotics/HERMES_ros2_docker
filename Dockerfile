@@ -201,11 +201,13 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     swig \
     python3-dev \
     python3-pip \
+    # critical: install compression plugins before building the underlay:
+    ros-${ROS_DISTRO}-image-transport-plugins \
     && pip3 install --upgrade lgpio gpiozero --break-system-packages \
     && rm -rf /var/lib/apt/lists/*
 
 # Note
-# Install ROS2 dependencies:
+# Install ROS2 dependencies, but NOT the camera node binary
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
@@ -214,13 +216,13 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     && rm -rf /var/lib/apt/lists/*
 
 # Resolve realsense-ros's own dependencies and build the underlay now.
-# on top of src/ later.
+# on top of src/ later. Ensure we skip the camera binary
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
     python3-colcon-common-extensions \
     # -r means that the rosdep still succeeds even if one package didn't
-    && rosdep install -y --ignore-src -r --from-paths src \
+    && rosdep install -y --ignore-src -r --from-paths src --skip-keys="librealsense2 realsense2_camera" \
     && rm -rf /var/lib/apt/lists/*
 
 RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release" \
