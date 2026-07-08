@@ -124,6 +124,7 @@ def generate_launch_description():
     )
 
     ld.add_action(ldlidar_node)
+    ld.add_action(ldlidar_container)
     ld.add_action(lc_mgr_node)
     # Add nodes to launch description
     ld.add_action(motor_driver_node)
