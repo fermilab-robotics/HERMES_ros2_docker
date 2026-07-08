@@ -1,5 +1,5 @@
 from launch import LaunchDescription
-from launch_ros.actions import Node, ComposableNodeContainer
+from launch_ros.actions import Node
 
 # To use .yaml files:
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, LogInfo
@@ -8,7 +8,6 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch_ros.substitutions import FindPackageShare
-from launch_ros.descriptions import ComposableNode
 
 from ament_index_python.packages import get_package_share_directory
 
@@ -73,61 +72,17 @@ def generate_launch_description():
     )
 
     # For LIDAR
+    lidar_dir = get_package_share_directory('ldrobot-lidar-ros2')
 
-  # 1. Paths to configuration files
-    ldlidar_config_path = os.path.join(
-        get_package_share_directory('ldlidar_node'),
-        'params',
-        'ldlidar.yaml'
-    )
-    
-    lc_mgr_config_path = os.path.join(
-        get_package_share_directory('ldlidar_node'),
-        'params',
-        'lifecycle_mgr.yaml'
+    lidar_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(lidar_dir, 'launch', 'ldlidar_with_mgr.launch.py'),
+        )
     )
 
-    # spin up composable node container
-    ldlidar_container = ComposableNodeContainer(
-        name='ldlidar_container',
-        namespace='',
-        package='rclcpp_components',
-        executable='component_container_isolated',
-        composable_node_descriptions=[
-            ComposableNode(
-                package='ldlidar_component',
-                plugin='ldlidar::LdLidarComponent', 
-                name='ldlidar_node',
-                parameters=[ldlidar_config_path],
-                extra_arguments=[{'use_intra_process_comms': True}] # performance tweak
-            )
-        ],
-        output='screen'
-    )
-
-    # 2. The core LiDAR driver node (launched directly as a standalone lifecycle node)
-    ldlidar_node = Node(
-        package='ldlidar_component',
-        executable='ldlidar_component_node',
-        name='ldlidar_node',
-        output='screen',
-        parameters=[ldlidar_config_path]
-    )
-
-    # 3. Nav2 Lifecycle Manager (to automatically configure and activate the node)
-    lc_mgr_node = Node(
-        package='nav2_lifecycle_manager',
-        executable='lifecycle_manager',
-        name='lifecycle_manager',
-        output='screen',
-        parameters=[lc_mgr_config_path]
-    )
-
-    ld.add_action(ldlidar_node)
-    ld.add_action(ldlidar_container)
-    ld.add_action(lc_mgr_node)
     # Add nodes to launch description
     ld.add_action(motor_driver_node)
     ld.add_action(realsense_launch)
+    ld.add_action(lidar_launch)
 
     return ld
