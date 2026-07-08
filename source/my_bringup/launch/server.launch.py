@@ -72,7 +72,7 @@ def generate_launch_description():
     )
 
     # For LIDAR
-    lidar_dir = get_package_share_directory('ldrobot-lidar-ros2')
+    lidar_dir = get_package_share_directory('ldlidar_node')
 
     lidar_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -83,5 +83,6 @@ def generate_launch_description():
     # Add nodes to launch description
     ld.add_action(motor_driver_node)
     ld.add_action(realsense_launch)
+    ld.add_action(lidar_launch)
 
     return ld
