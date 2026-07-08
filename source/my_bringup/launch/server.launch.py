@@ -1,5 +1,5 @@
 from launch import LaunchDescription
-from launch_ros.actions import Node
+from launch_ros.actions import Node, ComposableNodeContainer
 
 # To use .yaml files:
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, LogInfo
@@ -7,7 +7,7 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
-from launch_ros.substitutions import FindPackageShare
+from launch_ros.substitutions import FindPackageShare, ComposableNode
 
 from ament_index_python.packages import get_package_share_directory
 
@@ -86,6 +86,24 @@ def generate_launch_description():
         'lifecycle_mgr.yaml'
     )
 
+    # spin up composable node container
+    ldlidar_container = ComposableNodeContainer(
+        name='ldlidar_container',
+        namespace='',
+        package='rclcpp_components',
+        executable='component_container_isolated',
+        composable_node_descriptions=[
+            ComposableNode(
+                package='ldlidar_component',
+                plugin='ldlidar::LdLidarComponent', 
+                name='ldlidar_node',
+                parameters=[ldlidar_config_path],
+                extra_arguments=[{'use_intra_process_comms': True}] # performance tweak
+            )
+        ],
+        output='screen'
+    )
+    
     # 2. The core LiDAR driver node (launched directly as a standalone lifecycle node)
     ldlidar_node = Node(
         package='ldlidar_component',
