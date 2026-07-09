@@ -1,0 +1,13 @@
+/**:
+  ros__parameters:
+    analyzers:
+      heartbeat_check:
+      # Which analyzer class to instantiate
+        type: diagnostic_aggregator/GenericAnalyzer
+      # The display name it gets in the aggregrated tree
+        path: Heartbeats
+      # If the analyzer hasn't been seen for *timeout* seconds, the agggregrator pushes a STALE status
+        timeout: 5.0
+      # Matching criteria
+        contains: ['heartbeat']
+
