@@ -217,7 +217,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     ros-${ROS_DISTRO}-librealsense2* \
     && rm -rf /var/lib/apt/lists/*
 
-# Resolve realsense-ros's own dependencies and build the underlay now.
+
+    # Resolve realsense-ros's own dependencies and build the underlay now.
 # on top of src/ later. Ensure we skip the camera binary
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
@@ -227,6 +228,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     && rosdep install -y --ignore-src -r --from-paths src --skip-keys="librealsense2 realsense2_camera" \
     && rm -rf /var/lib/apt/lists/*
 
+
 RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release" \
     && chown -R ros:ros ${UNDERLAY_WS} \
     && echo "source ${UNDERLAY_WS}/install/local_setup.bash" >> /home/ros/.bashrc \
@@ -234,7 +236,7 @@ RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && colcon build --sym
     && echo '[ -f /home/ros/ws/install/local_setup.bash ] && source /home/ros/ws/install/local_setup.bash' >> /home/ros/.bashrc
 
 
-# Overlay workspace - our own packages under src/
+# Overlay workspace - our own packages under src/, built at runtime
 WORKDIR /home/ros/ws
 
 # Temperarily bind code to let rosdep scan and install dependencies

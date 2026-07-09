@@ -4,11 +4,11 @@
 
     <joint name="laser_joint" type="fixed">
         <parent link="chassis" />
-        <child link="laser_frame" />
+        <child link="ldlidar_link" />
         <origin xyz="0.1 0 ${chassis_height}" rpy="0 0 0"/>
     </joint>
 
-    <link name="laser_frame">
+    <link name="ldlidar_link">
         
         <visual>
             <geometry>
@@ -29,11 +29,11 @@
 
     </link>
 
-    <gazebo reference="laser_frame">
+    <gazebo reference="ldlidar_link">
         <!-- A scanning lidar ray-->
         <sensor name="laser" type="gpu_lidar">
             <!-- Origin of the virtual sensor -->
-            <pose relative_to="lidar_frame"> 0 0 0 0 0 0 </pose>
+            <pose relative_to="ldlidar_link"> 0 0 0 0 0 0 </pose>
 
             <topic>scan</topic>
             <visualize>false</visualize>
