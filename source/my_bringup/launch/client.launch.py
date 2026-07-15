@@ -22,7 +22,7 @@ def generate_launch_description():
         package='rqt_image_view',
         executable='rqt_image_view',
         name='rqt_image_view',
-        arguments=['/camera/camera/color/image_compressed'],
+        arguments=['/camera/camera/color/image_raw/compressed'],
         output='screen'
     )
 

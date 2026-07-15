@@ -36,7 +36,7 @@
             <pose relative_to="ldlidar_link"> 0 0 0 0 0 0 </pose>
 
             <topic>scan</topic>
-            <visualize>false</visualize>
+            <visualize>true</visualize>
             <update_rate>10</update_rate>
 
             <ray>
