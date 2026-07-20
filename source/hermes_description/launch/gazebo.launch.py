@@ -71,7 +71,11 @@ def generate_launch_description():
     joint_broad_spawn_node = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"]
+        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+        remappings=[
+            # Remap cmd_vel from the controller onto diff_cont/cmd_vel
+            ('/cmd_vel', '/diff_cont/cmd_vel')
+        ]
     )
 
      # Code for delaying a node (I haven't tested how effective it is)
