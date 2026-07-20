@@ -26,7 +26,7 @@ def generate_launch_description():
     config_file_arg = DeclareLaunchArgument(
         'bringup_config_file',
         default_value='hermes_launch.yaml',
-        description="Which configuartion YAML to load (hermes_launch or rvr_launch)"
+        description="Which configuration YAML to load (hermes_launch or rvr_launch)"
     )
 
     # Build the full path to the config file at runtime
@@ -67,7 +67,9 @@ def generate_launch_description():
         ),
         launch_arguments={
             'enable_color': 'true',
-            'enable_image_transport_plugins': 'true'
+            'enable_image_transport_plugins': 'true',
+            # 30fps, 720p
+            'rgb_camera.color_profile': '1280x720x30',
         }.items()
     )
 
