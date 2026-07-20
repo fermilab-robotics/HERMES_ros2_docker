@@ -12,6 +12,7 @@ public:
     PicoComms() = default;
 
     void connect(const std::string &serial_device, int32_t baud_rate, int timeout_ms);
+    bool connected() const;
     void disconnect();
 
     std::string send_msg(const std::string &msg_to_send, bool print_output = true);

@@ -41,6 +41,10 @@ void PicoComms::connect(const std::string &serial_device, int32_t baud_rate, int
     timeout_ms_ = timeout_ms;
 }
 
+bool PicoComms::connected() const {
+    return serial_conn_.isOpen();
+}
+
 void PicoComms::disconnect()
 {
     serial_conn_.Close();

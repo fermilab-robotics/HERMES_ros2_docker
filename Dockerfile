@@ -123,8 +123,7 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update \
-    && rosdep install -y --ignore-src --from-paths src --skip-keys="ros_gz ros_gz_sim ros_gz_bridge ros_gz_bridge rviz2" \
-    && rm -rf /var/lib/apt/lists/*
+    && rosdep install -y --ignore-src --from-paths src --skip-keys="ros_gz ros_gz_sim ros_gz_bridge ros_gz_bridge rviz2"
 
 # TODO: Make skip keys standard for controller and robot
 # OR: USE condition="..." in package.xml
