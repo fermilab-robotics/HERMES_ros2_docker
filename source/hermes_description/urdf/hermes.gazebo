@@ -16,6 +16,8 @@
         <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
             <!-- Path to controller yaml -->
             <parameters>$(find hermes_description)/config/my_controllers.yaml</parameters>
+            <!-- Use_sim_time true -->
+            <parameters>$(find hermes_description)/config/gaz_ros2_ctl_use_sim.yaml</parameters>
         </plugin>
     </gazebo>
 

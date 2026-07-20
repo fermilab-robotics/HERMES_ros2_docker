@@ -1,10 +1,29 @@
 <?xml version="1.0"?>
 
 <robot name="hermes" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!-- Use Gazebo or not -->
+    <xacro:arg name="use_gazebo" default="false" />
+
+    <!-- Use mock components or not? Note: If using mock, must disable gazebo -->
+    <xacro:arg name="use_mock" default="false" />
+
+    <!-- Actual Hardware -->
+    <xacro:arg name="use_hardware" default="true" />
+
+
+
+    <!-- Use ros2_control or not? -->
+    <xacro:arg name="use_ros2_control" default="true" />
+
     <xacro:include filename="hermes_core.xacro" />
     <xacro:include filename="hermes.gazebo" />
     <!-- <xacro:include filename="gazebo_control.xacro" /> -->
-    <xacro:include filename="ros2_control.xacro" />
+    <xacro:if value="$(arg use_ros2_control)">
+        <xacro:include filename="ros2_control.xacro" />
+    </xacro:if>
+    <xacro:unless value="$(arg use_ros2_control)">
+        <xacro:include filename="gazebo_control.xacro" />
+    </xacro:unless>
     <xacro:include filename="lidar.xacro" />
     <xacro:include filename="camera.xacro" />
 

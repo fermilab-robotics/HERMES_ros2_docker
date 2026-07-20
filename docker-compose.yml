@@ -35,8 +35,9 @@ services:
     environment:
       - ROS_DOMAIN_ID=42
       # For linux native: Just use 0 for display
+      # DISPLAY=${DISPLAY:-:0}
       # For windows -in-linux(example: Hyper-V): Use host.docker.internal:0.0
-      - DISPLAY=${DISPLAY:-:0}
+      - DISPLAY=host.docker.internal:0.0
       # Tell X11 where to find auth cookie
       - XAUTHORITY=/home/ros/.Xauthority
       - QT_X11_NO_MITSHM=1
@@ -55,7 +56,6 @@ services:
       # MAP THE COOKIE: Mounts your host login's display permission token straight to the ros user's home folder
       - ~/.Xauthority:/home/ros/.Xauthority:ro
       - ./cyclonedds.xml:/cyclonedds.xml:ro
-
 
   # Controller (operator-side dev)
   controller_dev:
@@ -124,7 +124,6 @@ services:
       - ~/.Xauthority:/home/ros/.Xauthority:ro
       - ./cyclonedds.xml:/cyclonedds.xml:ro
 
-
   robot_dev:
     build:
       context: .
@@ -169,7 +168,6 @@ services:
       # My live code source maps on top
       - ./source:/home/ros/ws/src
       - ./cyclonedds.xml:/cyclonedds.xml:ro
-
 
   robot_prod:
     build:

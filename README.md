@@ -60,3 +60,12 @@ Run `docker builder prune -a -f` on the pi to clear the disk from time-to-time
 ## Adding a new feature
 
 ## TODO: Add to docs - about CI/CD multiple targets
+
+# Running on laptop (windows)
+
+1. Set DISPLAY variable to host.docker.internal:0.0
+2. Unset CYCLONEDDS_URI
+
+# Switching back:
+
+1. Set Display variable back to ${DISPLAY:-:0}

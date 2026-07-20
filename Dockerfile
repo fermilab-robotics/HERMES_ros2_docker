@@ -112,7 +112,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     ros-${ROS_DISTRO}-compressed-image-transport \
     ros-${ROS_DISTRO}-image-view \
     ros-${ROS_DISTRO}-rqt-image-view  \
-    ros-${ROS_DISTRO}-teleop-twist-keyboard \  
+    ros-${ROS_DISTRO}-teleop-twist-keyboard \
      # ROS2 control:
     ros-${ROS_DISTRO}-ros2-control \
     ros-${ROS_DISTRO}-ros2-controllers \
@@ -140,8 +140,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     ros-${ROS_DISTRO}-ros-gz \
     ros-${ROS_DISTRO}-rviz2 \
     ros-${ROS_DISTRO}-rqt* \
-
-    # gazebo ros2 control plugin
     ros-${ROS_DISTRO}-gz-ros2-control \
     git \
     gdb \
