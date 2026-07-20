@@ -42,7 +42,7 @@ void PicoComms::connect(const std::string &serial_device, int32_t baud_rate, int
 }
 
 bool PicoComms::connected() const {
-    return serial_conn_.isOpen();
+    return serial_conn_.IsOpen();
 }
 
 void PicoComms::disconnect()
