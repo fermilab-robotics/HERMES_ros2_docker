@@ -69,3 +69,17 @@ Run `docker builder prune -a -f` on the pi to clear the disk from time-to-time
 # Switching back:
 
 1. Set Display variable back to ${DISPLAY:-:0}
+
+
+# Time issues
+
+sudo apt update && sudo apt install chrony -y
+
+
+Go to sudo nano /etc/chrony/chrony.conf and add
+allow 10.42.0.0/24 (or whatever the IP subnet is)
+local stratum 10
+
+and replace pool line with:
+server 10.42.0.1  iburst
+Adding an RTC clock
