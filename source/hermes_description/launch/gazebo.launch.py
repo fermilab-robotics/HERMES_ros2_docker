@@ -1,7 +1,7 @@
 from launch_ros.actions import Node
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable, RegisterEventHandler
-from launch.event_handlers import OnProcessExit
+from launch.event_handlers import OnProcessExit, OnProcessStart
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
@@ -65,17 +65,18 @@ def generate_launch_description():
         package="controller_manager",
         executable="spawner",
         # Add this to wait for controller manager
-        arguments=["diff_cont", "--controller-manager", "/controller_manager"]
+        arguments=["diff_cont", "--controller-manager", "/controller_manager"],
+        remappings=[
+            # Remap cmd_vel from the controller onto diff_cont/cmd_vel
+            ('/cmd_vel', '/diff_cont/cmd_vel')
+        ]
     )
 
     joint_broad_spawn_node = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
-        remappings=[
-            # Remap cmd_vel from the controller onto diff_cont/cmd_vel
-            ('/cmd_vel', '/diff_cont/cmd_vel')
-        ]
+
     )
 
      # Code for delaying a node (I haven't tested how effective it is)
@@ -93,7 +94,7 @@ def generate_launch_description():
     )
    #  Then add the following below the current diff_drive_spawner
     delayed_diff_drive_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
+        event_handler=OnProcessStart(
             target_action=joint_broad_spawn_node,
             on_exit=[diff_drive_spawn_node],
         )
