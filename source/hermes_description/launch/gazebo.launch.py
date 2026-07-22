@@ -19,7 +19,7 @@ def generate_launch_description():
     share_dir = get_package_share_directory("hermes_description")
     urdf_path = os.path.join(share_dir, 'urdf', 'hermes.urdf.xacro')
 
-    robot_description_config = xacro.process_file(urdf_path)
+    robot_description_config = xacro.process_file(urdf_path, mappings={'use_gazebo': 'true', 'use_mock': 'false', 'use_hardware': 'false'})
     robot_description = robot_description_config.toxml()
 
     rviz_config_file = os.path.join(share_dir, 'config', 'display.rviz')
