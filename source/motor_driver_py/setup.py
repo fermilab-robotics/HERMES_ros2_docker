@@ -30,6 +30,8 @@ setup(
     entry_points={
         'console_scripts': [
             "motor_subscriber = motor_driver_py.motor_subscriber:main",
+            "latency_echo_publisher = motor_driver_py.latency_echo_publisher:main",
+            "latency_test_node = motor_driver_py.latency_test_node:main"
         ],
     },
 )
