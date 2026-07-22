@@ -68,8 +68,15 @@ def generate_launch_description():
         launch_arguments={
             'enable_color': 'true',
             'enable_image_transport_plugins': 'true',
+            'enable_depth': 'false',
             # 30fps, 720p
             'rgb_camera.color_profile': '1280x720x30',
+            
+            # Force the raw publisher to use Best Effort (Stops the network from getting stuck)
+            'qos_overrides./camera/camera/color/image_raw.publisher.reliability': 'best_effort',
+            
+            # Force the compressed publisher to use Best Effort
+            'qos_overrides./camera/camera/color/image_raw/compressed.publisher.reliability': 'best_effort',
         }.items()
     )
 

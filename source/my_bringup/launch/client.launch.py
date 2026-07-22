@@ -22,7 +22,7 @@ def generate_launch_description():
         package='rqt_image_view',
         executable='rqt_image_view',
         name='rqt_image_view',
-        arguments=['_image_transport:=compressed'],
+        arguments=['--ros-args', '-p', 'qos_overrides./camera/camera/color/image_raw/compressed.subscriber.reliability:=best_effort', '-p', 'image_transport:=compressed'],
         output='screen'
     )
 
