@@ -15,8 +15,18 @@
             </Interfaces>
             <!-- Restrict cyclonedds to specific interfaces -->
             <DontRoute>true</DontRoute>
+            <!--
             <AllowMulticast>true</AllowMulticast>
             <EnableMulticastLoopback>true</EnableMulticastLoopback>
+            -->
+            <AllowMulticast>false</AllowMulticast>
         </General>
-    </Domain>
+        <Discovery>
+            <Peers>
+                <Peer address="10.42.0.1" />
+                <Peer address="10.42.0.17" />
+                <Peer address="10.42.0.16" />
+            </Peers>
+        </Discovery>
+
 </CycloneDDS>
