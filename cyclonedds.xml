@@ -28,5 +28,5 @@
                 <Peer address="10.42.0.16" />
             </Peers>
         </Discovery>
-
+    </Domain>
 </CycloneDDS>
