@@ -2,6 +2,12 @@
 
 This is the repository of the Fermilab-Robotics Teleoperated stack. This stack is ROS2-based and tested on Ubuntu 26.04 LTS with ROS2 Lyrical.
 
+
+## To view docs, run the following commands:
+cd docs
+zensical serve (do we need to install zensical?)
+
+
 ![Alt](doc/images/visual_abstract.png)
 
 The software stack is grouped in the following packages:
