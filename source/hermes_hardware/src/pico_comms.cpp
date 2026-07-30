@@ -53,7 +53,6 @@ void PicoComms::disconnect()
 // From Josh Newan's arduino_comms.hpp
 std::string PicoComms::send_msg(const std::string &msg_to_send, bool print_output)
 {
-    serial_conn_.FlushIOBuffers(); // Just in case
     serial_conn_.Write(msg_to_send);
 
     std::string response = "";
@@ -76,6 +75,15 @@ std::string PicoComms::send_msg(const std::string &msg_to_send, bool print_outpu
     return response;
 }
 
+void PicoComms::send_command(const std::string& cmd) {
+    /* Sends a command without expecting a response */
+    try {
+        serial_conn_.Write(cmd);
+    } catch (const std::exception& e) {
+        std::cerr << "Caught exception: " << e.what() << std::endl;
+    }
+}
+
 void PicoComms::send_empty_msg()
 {
     std::string response = send_msg("\r");
@@ -83,13 +91,15 @@ void PicoComms::send_empty_msg()
 
 void PicoComms::read_encoder_values(int &val_1, int &val_2)
 {
-    std::string response = send_msg("e\r");
+    std::string response = send_msg("e\r", false);
 
+    // split the response by space
     std::string delimiter = " ";
     size_t del_pos = response.find(delimiter);
     std::string token_1 = response.substr(0, del_pos);
     std::string token_2 = response.substr(del_pos + delimiter.length());
 
+    // read into val_1 and val_2
     val_1 = std::atoi(token_1.c_str());
     val_2 = std::atoi(token_2.c_str());
 }
@@ -98,5 +108,5 @@ void PicoComms::set_motor_values(int val_1, int val_2)
 {
     std::stringstream ss;
     ss << "m " << val_1 << " " << val_2 << "\r";
-    send_msg(ss.str());
+    send_command(ss.str());
 }

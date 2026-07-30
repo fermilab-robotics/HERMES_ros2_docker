@@ -16,6 +16,7 @@
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
 
+#include "wheel.hpp"
 #include "pico_comms.hpp"
 
 namespace hermes_hardware
@@ -51,8 +52,12 @@ namespace hermes_hardware
 
         PicoComms comms_;
         std::string serial_port_;
-        // Wheel wheel_l_1;
-        // Wheel wheel_l_2
+        int baud_rate_;
+        float loop_rate_; // how frequently ros2_control loops?
+        int timeout_ms_ = 0; // timeout
+        int enc_counts_per_rev_;
+        Wheel wheel_l_;
+        Wheel wheel_r_;
     };
 
 } // namespace ros2_control_demo_example_2

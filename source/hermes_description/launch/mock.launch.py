@@ -3,9 +3,11 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable, RegisterEventHandler
 from launch.event_handlers import OnProcessStart
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Command
 from launch_ros.substitutions import FindPackageShare
 from launch.conditions import IfCondition, UnlessCondition
+from launch_ros.parameter_descriptions import ParameterValue
+
 from ament_index_python.packages import get_package_share_directory
 import xacro
 import os
@@ -18,8 +20,17 @@ def generate_launch_description():
 
     # Process urdf / xacro
     urdf_path = os.path.join(share_dir, 'urdf', 'hermes.urdf.xacro')
-    robot_description_config = xacro.process_file(urdf_path)
-    robot_description = robot_description_config.toxml()
+
+    robot_description_content = ParameterValue(
+        Command([
+            'xacro ', urdf_path,
+            ' use_gazebo:=false',
+            ' use_mock:=true', 
+            ' use_hardware:=false'
+        ]),
+        value_type=str # passing a string to the launcher
+    )
+
 
     # Path to controller configuration files
     controller_params_file = os.path.join(share_dir, 'config', 'my_controllers.yaml')
@@ -32,14 +43,14 @@ def generate_launch_description():
         name='robot_state_publisher',
         parameters=[
             # Must use simulation time with gazebo
-            {'robot_description': robot_description}
+            {'robot_description': robot_description_content}
         ]
     )
 
     controller_manager_node = Node(
         package='controller_manager',
         executable="ros2_control_node",
-        parameters=[robot_description, controller_params_file],
+        parameters=[robot_description_content, controller_params_file],
         output="screen"
     )
 

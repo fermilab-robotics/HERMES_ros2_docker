@@ -3,8 +3,9 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable, RegisterEventHandler
 from launch.event_handlers import OnProcessExit, OnProcessStart
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Command
 from launch_ros.substitutions import FindPackageShare
+from launch_ros.parameter_descriptions import ParameterValue
 from launch.conditions import IfCondition, UnlessCondition
 from ament_index_python.packages import get_package_share_directory
 import xacro
@@ -19,8 +20,20 @@ def generate_launch_description():
     share_dir = get_package_share_directory("hermes_description")
     urdf_path = os.path.join(share_dir, 'urdf', 'hermes.urdf.xacro')
 
-    robot_description_config = xacro.process_file(urdf_path, mappings={'use_gazebo': 'true', 'use_mock': 'false', 'use_hardware': 'false'})
-    robot_description = robot_description_config.toxml()
+    robot_description_content = ParameterValue(
+        Command([
+            'xacro ', urdf_path,
+            ' use_gazebo:=true',
+            ' use_mock:=false', 
+            ' use_hardware:=false'
+        ]),
+        value_type=str # passing a string to the launcher
+    )
+
+    # The above does the same as this
+    # xacro.process_file(urdf_path, mappings={'use_gazebo': 'true', 'use_mock': 'false', 'use_hardware': 'false'})
+
+    # robot_description = robot_description_config.toxml()
 
     rviz_config_file = os.path.join(share_dir, 'config', 'display.rviz')
     # default_rviz_config_path = PathJoinSubstitution([share_dir, 'rviz', 'display.rviz'])
@@ -32,7 +45,7 @@ def generate_launch_description():
         name='robot_state_publisher',
         parameters=[
             # Must use simulation time with gazebo
-            {'robot_description': robot_description, 'use_sim_time': True}
+            {'robot_description': robot_description_content, 'use_sim_time': True}
         ]
     )
 
@@ -66,10 +79,10 @@ def generate_launch_description():
         executable="spawner",
         # Add this to wait for controller manager
         arguments=["diff_cont", "--controller-manager", "/controller_manager"],
-        remappings=[
-            # Remap cmd_vel from the controller onto diff_cont/cmd_vel
-            ('/cmd_vel', '/diff_cont/cmd_vel')
-        ]
+        # remappings=[
+        #     # Remap cmd_vel from the controller onto diff_cont/cmd_vel
+        #     ('/cmd_vel', '/diff_cont/cmd_vel')
+        # ]
     )
 
     joint_broad_spawn_node = Node(

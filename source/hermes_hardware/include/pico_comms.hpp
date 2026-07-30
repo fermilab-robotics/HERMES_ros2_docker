@@ -16,6 +16,7 @@ public:
     void disconnect();
 
     std::string send_msg(const std::string &msg_to_send, bool print_output = true);
+    void send_command(const std::string& cmd);
     void send_empty_msg();
     void read_encoder_values(int &val_1, int &val_2);
     void set_motor_values(int val_1, int val_2);

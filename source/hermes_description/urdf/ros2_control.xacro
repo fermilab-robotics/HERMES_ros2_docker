@@ -19,6 +19,9 @@
                 <param name="example_param_hw_start_duration_sec">0</param>
                 <param name="example_param_hw_stop_duration_sec">0</param>
                 <param name="serial_port">/dev/ttyACM0</param>
+                <param name="baud_rate">115200</param>
+                <param name="loop_rate">${controllers_config['controller_manager']['ros__parameters']['update_rate']}</param> <!-- 100Hz -->
+                <param name="timeout_ms">1000</param> <!-- 1 second -->
              </xacro:if>
         </hardware> 
         <joint name="left_rear_wheel_joint">

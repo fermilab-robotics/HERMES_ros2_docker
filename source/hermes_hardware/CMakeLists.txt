@@ -21,6 +21,7 @@ add_library(
   SHARED
   src/hermes_system.cpp
   src/pico_comms.cpp
+  src/wheel.cpp
 )
 
 # Enforce C++17 rules

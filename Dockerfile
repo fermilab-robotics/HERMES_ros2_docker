@@ -65,6 +65,9 @@ RUN apt-get update && apt-get install -y \
 RUN rosdep init || true \
     && rosdep update
 
+# Add user to dialout group (to get serial devices work)
+RUN usermod -aG dialout ${USERNAME}
+
 # Configurations (some packages might want this)
 COPY config/ /site_config/
 

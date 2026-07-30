@@ -6,13 +6,15 @@
 
 class Wheel
 {
-private:
+public:
     std::string name;
+
+    // encoder raw read value
     int enc;
-    double cmd;
+    int cmd_vel_rad_per_s;
     double pos;
     double vel;
-    double rads_per_count;
+    double rads_per_count; // radians per count of encoder
 
 public:
     Wheel() = default;
@@ -21,6 +23,7 @@ public:
 
     void setup(const std::string &wheel_name, int counts_per_rev);
     double calc_enc_angle();
+
 };
 
 #endif // DIFFDRIVE_ARDUINO_WHEEL_HPP

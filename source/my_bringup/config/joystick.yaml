@@ -1,0 +1,12 @@
+teleop_twist_joy_node:
+  ros__parameters:
+    joy_config: 'xbox'
+    publish_stamped_twist: true
+
+    scale_linear:
+      x: 0.5
+
+    scale_angular:
+      yaw: 
+
+    enable_button:
