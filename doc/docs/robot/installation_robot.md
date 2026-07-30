@@ -70,7 +70,6 @@ sudo usermod -aG docker $USER
 newgrp docker
 ```
 
-Now, [clone the repository onto the device](/doc/clone_repo.md)
 
 
 Success! Now go to [build_robot](./build_robot.md) to build the project!

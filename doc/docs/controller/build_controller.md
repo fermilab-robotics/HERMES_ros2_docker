@@ -19,4 +19,4 @@ Clearing docker containers(Old):
 ## Troubleshooting
 
 If you're getting "invalid for another 1d 16h 48 min 58s", that is an indication of a date issue.
-Date issues? Follow: [fixing date issues](/doc/fixing_date_issues.md)
+Date issues? Follow: [fixing date issues]()

@@ -24,6 +24,6 @@ sudo apt-get install docker-compose-plugin
 docker compose version
 ```
 
-Follow the [repository cloning steps](/doc/clone_repo.md) to clone the repo onto the controller.
+Follow the [repository cloning steps]() to clone the repo onto the controller.
 
 Success! Now go to [build controller](./build_controller.md) to build the project!

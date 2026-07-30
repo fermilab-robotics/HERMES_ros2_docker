@@ -19,7 +19,7 @@
     
     
       
-        <title>Troubleshooting - AD Robotics</title>
+        <title>Camera issues - AD Robotics</title>
       
     
     
@@ -76,8 +76,7 @@
     <label class="md-overlay" for="__drawer" aria-label="Navigation"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#_1" class="md-skip">
+        <a href="#__skip" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Troubleshooting
+              Camera issues
             
           </span>
         </div>
@@ -589,11 +588,6 @@
                     
                     
                     
-                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-                      <div class="md-sidebar-button__wrapper">
-                        <label class="md-sidebar-button" for="__toc"></label>
-                      </div>
-                    
                   
                   <div class="md-sidebar__inner">
                     
@@ -603,25 +597,6 @@
   
   
   
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      On this page
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
   
 </nav>
                   </div>
@@ -644,20 +619,19 @@
                 
                   
 
-  <h1 id="__skip">Troubleshooting</h1>
+  <h1 id="__skip">Camera issues</h1>
 
-<h2 id="_1"><a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-
-
-
-
+<p>If dropping frames due to mismatch</p>
+<p>On Pi Host:
+<code>sudo date -s "$(ssh user@laptop_ip 'date -u +"%Y-%m-%d %H:%M:%S"')"</code></p>
 
 
 
 
 
-  
-  
+
+
+
 
 
 
