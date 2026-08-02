@@ -51,6 +51,7 @@ def generate_launch_description():
         package='controller_manager',
         executable="ros2_control_node",
         parameters=[{'robot_description': robot_description_content}, controller_params_file],
+        arguments=["--ros-args", "--log-level", "controller_manager:=debug"],
         output="screen"
     )
 
@@ -58,15 +59,15 @@ def generate_launch_description():
     diff_drive_spawn_node = Node(
         package="controller_manager",
         executable="spawner",
-        # Add this to wait for controller manager
-        arguments=["diff_cont", "--controller-manager", "/controller_manager"],
+        # Add this to wait for controller manager add timeout so it doesn't prematurely launch
+        arguments=["diff_cont", "--controller-manager", "/controller_manager" "--controller-manager-timeout", "30"],
         output='screen'
     )
 
     joint_broad_spawn_node = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager", "--controller-manager-timeout", "30"],
         output='screen'
     )
 
