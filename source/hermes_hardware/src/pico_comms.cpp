@@ -38,6 +38,12 @@ void PicoComms::connect(const std::string &serial_device, int32_t baud_rate, int
 {
     serial_conn_.Open(serial_device);
     serial_conn_.SetBaudRate(convert_baud_rate(baud_rate));
+    
+    // Important to set other parameters so that Pi version doesn't pull random paramteres
+    serial_conn_.SetFlowControl(LibSerial::FlowControl::FLOW_CONTROL_NONE);
+    serial_conn_.SetParity(LibSerial::Parity::PARITY_NONE);
+    serial_conn_.SetCharacterSize(LibSerial::CharacterSize::CHAR_SIZE_8);
+    serial_conn_.SetStopBits(LibSerial::StopBits::STOP_BITS_1);
     timeout_ms_ = timeout_ms;
 }
 
