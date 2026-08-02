@@ -19,16 +19,11 @@
             <AllowMulticast>true</AllowMulticast>
             <EnableMulticastLoopback>true</EnableMulticastLoopback>
             -->
-            <AllowMulticast>true</AllowMulticast>
+            <AllowMulticast>true</AllowMulticast>            
+            <EnableMulticastLoopback>true</EnableMulticastLoopback>
+        
         </General>
-        <Discovery>
-            <Peers>
-                <Peer address="10.42.0.1" />
-                <Peer address="10.42.0.17" />
-                <Peer address="10.42.0.16" />
-                <!-- Common auto route interfaces -->
-                <Peer address="10.42.0.43" />
-            </Peers>
-        </Discovery>
+
+
     </Domain>
 </CycloneDDS>
