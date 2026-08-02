@@ -1,12 +1,10 @@
 # Fermilab Robotics: Hermes ROS2 framework
 
-This is the repository of the Fermilab-Robotics Teleoperated stack. This stack is ROS2-based and tested on Ubuntu 26.04 LTS with ROS2 Lyrical.
+This is the repository of the Fermilab-Robotics Teleoperated stack. 
 
-
-## To view docs, run the following commands:
-cd docs
-zensical serve (do we need to install zensical?)
-
+## Docs
+Repo: https://github.com/fermilab-robotics/robotics-documentation
+Website: https://fermilab-robotics.github.io/robotics-documentation
 
 ![Alt](doc/images/visual_abstract.png)
 
