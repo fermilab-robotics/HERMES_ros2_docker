@@ -60,7 +60,7 @@ def generate_launch_description():
         package="controller_manager",
         executable="spawner",
         # Add this to wait for controller manager add timeout so it doesn't prematurely launch
-        arguments=["diff_cont", "--controller-manager", "/controller_manager", issing comma"--controller-manager-timeout", "30"],
+        arguments=["diff_cont", "--controller-manager", "/controller_manager", "--controller-manager-timeout", "30"],
         output='screen'
     )
 
