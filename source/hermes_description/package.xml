@@ -9,11 +9,19 @@
 
   <depend>robot_state_publisher</depend>
   <depend>joint_state_publisher_gui</depend>
+
   <exec_depend>rviz2</exec_depend>
 
+  <!-- Ensure Gazebo clutter is skipped in Robot builds -->
   <depend>ros_gz</depend>
   <depend>ros_gz_sim</depend>
   <depend>ros_gz_bridge</depend>
+
+  <!-- ROS2 Control -->
+  <depend>ros2_control</depend>
+  <depend>ros2_controllers</depend>
+
+
 
   <exec_depend>xacro</exec_depend>
   

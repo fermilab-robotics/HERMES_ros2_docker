@@ -59,6 +59,7 @@ RUN apt-get update \
 # Install ROS packages
 RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
+
     && rm -rf /var/lib/apt/lists/*
 
 # Initialize rosdep (for installing dependencies) if not already there
@@ -126,7 +127,7 @@ RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update \
-    && rosdep install -y --ignore-src --from-paths src --skip-keys="ros_gz ros_gz_sim ros_gz_bridge ros_gz_bridge rviz2"
+    && rosdep install -y --ignore-src --from-paths src --skip-keys="ros_gz ros_gz_sim ros_gz_bridge ros_gz_bridge"
 
 # TODO: Make skip keys standard for controller and robot
 # OR: USE condition="..." in package.xml
