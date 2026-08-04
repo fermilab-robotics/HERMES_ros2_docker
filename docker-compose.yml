@@ -230,7 +230,6 @@ services:
     working_dir: /home/ros/ws
     privileged: true
     user: ros
-    restart: unless-stopped
     environment:
       - ROS_DOMAIN_ID=42
       - GPIOZERO_PIN_FACTORY=lgpio
