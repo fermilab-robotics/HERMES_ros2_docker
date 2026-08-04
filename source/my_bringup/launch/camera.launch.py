@@ -2,18 +2,25 @@ import os
 
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
-from ament_index_python.packages import get_package_share_directory
+# from ament_index_python.packages import get_package_share_directory
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch_ros.substitutions import FindPackageShare
+from launch.substitutions import PathJoinSubstitution
 
 
 def generate_launch_description():
-    ld = LaunchDescription()
+    # ld = LaunchDescription()
 
-    realsense_dir = get_package_share_directory('realsense2_camera')
+    # realsense_dir = get_package_share_directory('realsense2_camera')
+
     # realsense node
     realsense_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(realsense_dir, 'launch', 'rs_launch.py')
+            PathJoinSubstitution([
+                FindPackageShare('realsense2_camera'),
+                'launch',
+                'rs_launch.py'
+            ])
         ),
         launch_arguments={
             'enable_color': 'true',
@@ -30,6 +37,5 @@ def generate_launch_description():
         }.items()
     )
 
-    ld.add_action(realsense_launch)
 
-    return ld
+    return LaunchDescription([realsense_launch])

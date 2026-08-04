@@ -19,7 +19,8 @@ The software stack is grouped in the following packages:
 - `motor_driver_py`
     - Obsolete package used to drive motors before ROS2 control.
 
-- `my_bringup` - Contains individual 
+- `my_bringup` - Contains 
+    - 
 
 
 

@@ -28,24 +28,37 @@ def generate_launch_description():
 
     ld.add_action(rqt_image_view_node)
 
-    # Find the teleop_twist_joy launch file
-    teleop_twist_joy_launch = IncludeLaunchDescription(
+
+    joystick_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            PathJoinSubstitution(
-                [
-                FindPackageShare('teleop_twist_joy'), 
-                'launch', 
-                'teleop-launch.py'
-                ]
-            )
-        ),
-        launch_arguments={
-            'joy_config': "xbox", # Switches button mappings to XBox
-            # Optional: joy_dev, publish_stapmed_twist
-        }.items()
+            PathJoinSubstitution([
+                FindPackageShare("my_bringup"),
+                "launch",
+                "joystick.launch.py"
+            ])
+        )
     )
 
+    ld.add_action(joystick_launch)
 
-    ld.add_action(teleop_twist_joy_launch)
+    # Find the teleop_twist_joy launch file
+    # teleop_twist_joy_launch = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(
+    #         PathJoinSubstitution(
+    #             [
+    #             FindPackageShare('teleop_twist_joy'), 
+    #             'launch', 
+    #             'teleop-launch.py'
+    #             ]
+    #         )
+    #     ),
+    #     launch_arguments={
+    #         'joy_config': "xbox", # Switches button mappings to XBox
+    #         # Optional: joy_dev, publish_stapmed_twist
+    #     }.items()
+    # )
+
+
+    # ld.add_action(teleop_twist_joy_launch)
 
     return ld
