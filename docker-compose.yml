@@ -137,6 +137,9 @@ services:
       - ~/.Xauthority:/home/ros/.Xauthority:ro
       - ./cyclonedds.xml:/cyclonedds.xml:ro
 
+    # The docker container restarts by default
+    restart: unless-stopped
+
   # For simulating the robot
   robot_sim:
     build:
@@ -241,6 +244,9 @@ services:
       - /run/dbus:/run/dbus
 
       - ./cyclonedds.xml:/cyclonedds.xml:ro
+    
+    # The docker container restarts by default
+    restart: unless-stopped
 
 volumes:
   controller_build:
