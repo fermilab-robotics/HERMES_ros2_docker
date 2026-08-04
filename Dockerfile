@@ -59,7 +59,6 @@ RUN apt-get update \
 # Install ROS packages
 RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
-
     && rm -rf /var/lib/apt/lists/*
 
 # Initialize rosdep (for installing dependencies) if not already there
