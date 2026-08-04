@@ -179,8 +179,6 @@ SHELL ["/bin/bash", "-c"]
 
 RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
     source /opt/ros/${ROS_DISTRO}/setup.bash \
-    # Source the underlay before running colcon build
-    && source  ${UNDERLAY_WS}/install/local_setup.bash \
     && colcon build --packages-select my_bringup hermes_description my_diagnostics
 
 #drop privileges
