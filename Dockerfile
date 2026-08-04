@@ -172,11 +172,23 @@ CMD ["/bin/bash"]
 
 # ================= CONTROLLER_PROD ==================== #
 FROM operator_base AS controller_prod
-# Drop privileges
+
+# ----------------Build colcon workspace -------------
+
+# Set the default SHELL to bash so we don't need /bin/bash -c in our run command
+SHELL ["/bin/bash", "-c"]
+
+RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
+    source /opt/ros/${ROS_DISTRO}/setup.bash \
+    # Source the underlay before running colcon build
+    && source  ${UNDERLAY_WS}/install/local_setup.bash \
+    && colcon build --packages-select my_bringup hermes_description my_diagnostics
+
+#drop privileges
 USER $USERNAME
 
-# TODO: Replace with CMD ["ros2", "launch", "controller_bringup", "controller_launch.py"]
-CMD ["ros2", "topic", "echo", "/camera/camera/color/image_raw"]
+# Run our launch file (entrypoint.sh handles the install/setup.bash sourcing)
+CMD ["ros2", "launch", "my_bringup", "controller.launch.py"]
 
 # ================= ROBOT BASE ====================== #
 FROM base AS robot_base
@@ -274,3 +286,25 @@ USER $USERNAME
 
 # Enter bash shell by default
 CMD ["/bin/bash"]
+
+
+# ================= ROBOT PROD ====================== #
+
+FROM robot_base AS robot_prod
+
+# ----------------Build colcon workspace -------------
+
+# Set the default SHELL to bash so we don't need /bin/bash -c in our run command
+SHELL ["/bin/bash", "-c"]
+
+RUN --mount=type=bind,source=source,target=/home/ros/ws/src \
+    source /opt/ros/${ROS_DISTRO}/setup.bash \
+    # Source the underlay before running colcon build
+    && source  ${UNDERLAY_WS}/install/local_setup.bash \
+    && colcon build --packages-select hermes_hardware my_bringup hermes_description my_diagnostics
+
+#drop privileges
+USER $USERNAME
+
+# Run our launch file (entrypoint.sh handles the install/setup.bash sourcing)
+CMD ["ros2", "launch", "my_bringup", "hermes.launch.py"]

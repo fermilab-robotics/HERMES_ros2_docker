@@ -3,10 +3,11 @@
 # Enable error signals
 set -e
 
-# Source ROS 2
+# Source ROS 2 environment
 source /opt/ros/$ROS_DISTRO/setup.bash
 
 # Source the underlay workspace (External repos)
+
 # IF the string UNDERLAY_WS is NOT empty (e.g. we are in the robot_dev stage AND if the local_setup.bash file exists, then source it )
 if [ -n "${UNDERLAY_WS}" ] && [ -f "${UNDERLAY_WS}/install/local_setup.bash" ]; then
   source "${UNDERLAY_WS}/install/local_setup.bash"
@@ -22,4 +23,4 @@ sudo chown -R ros:ros /home/ros/ws 2>/dev/null || true
 echo "Provided arguments: $@"
 
 # Excecute the command passed to this entrypoint
-exec "$@"
+exec "$@" 

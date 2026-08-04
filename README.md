@@ -23,6 +23,9 @@ The software stack is grouped in the following packages:
     - 
 
 
+Dockerfile: 
+The docker file contains
+
 
 ## Troubleshooting
 

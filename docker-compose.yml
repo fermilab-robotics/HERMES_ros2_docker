@@ -99,6 +99,44 @@ services:
       - ~/.Xauthority:/home/ros/.Xauthority:ro
       - ./cyclonedds.xml:/cyclonedds.xml:ro
 
+  controller_prod:
+    build:
+      context: .
+      args: *build-args
+      # Which dockerfile section to use
+      target: controller_prod
+
+    image: ros2-controller_prod:latest
+    <<: [*ros-net, *device-access]
+    stdin_open: true
+    privileged: true # Needed for PIO access
+    tty: true
+    # Placed inside the user's home directory
+    working_dir: /home/ros/ws
+    user: ros
+
+    environment:
+      - ROS_DOMAIN_ID=42
+      # Fix bug
+      - GPIOZERO_PIN_FACTORY=lgpio
+      - RPI_LGPIO_CHIP=0
+      - DISPLAY=${DISPLAY:-:0}
+      # Tell X11 where to find auth cookie
+      - XAUTHORITY=/home/ros/.Xauthority
+      - QT_X11_NO_MITSHM=1
+
+    volumes:
+      - /dev:/dev
+      # Named volume keeps build, install, and log files cached and fast
+      # FIX: Cache only the sub-folders, leaving /home/ros/ws root untouched
+
+      # Share the GUI
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+
+      # MAP THE COOKIE: Mounts host login's display permission token to the ros user's home folder
+      - ~/.Xauthority:/home/ros/.Xauthority:ro
+      - ./cyclonedds.xml:/cyclonedds.xml:ro
+
   # For simulating the robot
   robot_sim:
     build:
@@ -196,7 +234,7 @@ services:
       - RPI_LGPIO_CHIP=0
       - DISPLAY=${DISPLAY:-:0}
     volumes:
-      # No caches here, everything is built in the dockerfile
+      # No caches here, everything is built in the dockerfile at build-time
       - /dev:/dev
       # For camera access
       - /run/udev:/run/udev
