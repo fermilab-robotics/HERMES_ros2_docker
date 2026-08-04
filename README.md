@@ -1,6 +1,9 @@
 # Fermilab Robotics: Hermes ROS2 framework
 
-This is the repository of the Fermilab-Robotics Teleoperated stack. 
+This is the repository of the Fermilab-Robotics Teleoperated stack.
+
+- Uses ROS2 control to drive motors & run odometry
+- Lidar  
 
 ## Docs
 Repo: https://github.com/fermilab-robotics/robotics-documentation
@@ -10,34 +13,15 @@ Website: https://fermilab-robotics.github.io/robotics-documentation
 
 The software stack is grouped in the following packages:
 
-A video showcasing the software on Hermes and RVR will be available soon.
+- `hermes_description`
+    - `drive.launch.py`: Used to boot up the drive system
 
-## System Architecture
+- `motor_driver_py`
+    - Obsolete package used to drive motors before ROS2 control.
 
-The system architecture is depicted in the following graphic:
+- `my_bringup` - Contains individual 
 
-## Getting started
 
-[Getting Started](doc/getting_started.md)
-Information about the docker workspace:
-
-## Laptop Setup
-
-Install Docker Engine:
-
-If Linux:
-Enable GUI programs outsied container:
-xhost +
-
-Remember to change display output to whatever works
-
-Use Dev Container extension in VSCODE:
--> Select: existing dockerfile exists
-
-OR:
-use:
-docker compose up -d
-docker
 
 ## Troubleshooting
 
@@ -65,14 +49,6 @@ Run `docker builder prune -a -f` on the pi to clear the disk from time-to-time
 
 ## TODO: Add to docs - about CI/CD multiple targets
 
-# Running on laptop (windows)
-
-1. Set DISPLAY variable to host.docker.internal:0.0
-2. Unset CYCLONEDDS_URI
-
-# Switching back:
-
-1. Set Display variable back to ${DISPLAY:-:0}
 
 
 # Time issues
