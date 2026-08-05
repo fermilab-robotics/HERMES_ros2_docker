@@ -52,15 +52,17 @@ def generate_launch_description():
     # Include LDLidar launch
     ldlidar_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            PathJoinSubstitution([
-            FindPackageShare('my_bringup'), # Link to our own modified file
-            'launch',
-            'ldlidar_bringup.launch.py'
-        ]),
+            PathJoinSubstitution(
+                [
+                FindPackageShare('my_bringup'), # Link to our own modified file
+                'launch',
+                'ldlidar_bringup.launch.py'
+                ]
+            )
+        ),
         launch_arguments={
             'node_name': 'ldlidar_node'
         }.items()
-        )
     )
 
     # Define LaunchDescription variable
