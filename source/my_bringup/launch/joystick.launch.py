@@ -40,6 +40,7 @@ def generate_launch_description():
                 launch_arguments={
                     'joy_config': 'xbox',
                     # 'config_filepath': joy_params,
+                    'require_enable_button': 'false', # don't require confirm button
                     'publish_stamped_twist': 'true' # wasn't working in yaml for some reason
                     #'joy_config': "xbox", # Switches button mappings to XBox
                     # Optional: joy_dev, publish_stapmed_twist

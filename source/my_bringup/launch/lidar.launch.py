@@ -9,11 +9,7 @@ from launch.substitutions import PathJoinSubstitution
 
 
 def generate_launch_description():
-
-    # For LIDAR
-    # TODO: Fix: interferes with URDF
-    # lidar_dir = get_package_share_directory('ldlidar_node')
-
+    
     lidar_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
