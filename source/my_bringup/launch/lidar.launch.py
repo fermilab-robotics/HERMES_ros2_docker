@@ -9,11 +9,11 @@ from launch.substitutions import PathJoinSubstitution
 
 
 def generate_launch_description():
-    
+
     lidar_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
-                'ldlidar_node',
+                FindPackageShare('ldlidar_node'), # Package is called ldlidar_node
                 'launch',
                 'ldlidar_with_mgr.launch.py'
             ])
