@@ -1,14 +1,37 @@
-# MARF — Modular Accelerator Robotics Framework
-
-MARF is a robotics framework powered by ROS2 and Docker, for deploying onto Fermilab's accelerator robotics fleet.
+# MARF
+MARF(Modular Accelerator Robotics Framework) is a ROS2-based robotics framework for deploying and operating Fermilab's accelerator robotics fleet.
 
 This code loads on Raspberry Pi's on the controller, laptop, and robot.
 
-Its control system is currently configured to run a robot in differential drive—treads, wheels, etc. 
+The drive system uses the `ros2_control` library.
 
-Though it is called "HERMES" framework, in principle, it is capable of running on RVR as well. [See more](https://fermilab-robotics.github.io/robotics-documentation/getting-started/int-rover.html)
+Though it was originally tested on the HERMES robot, in principle, it is capable of running on RVR as well. [RVR Migration Guide](https://fermilab-robotics.github.io/robotics-documentation/getting-started/setting-up-RVR.html)
 
-Additionally, though it was configured to run on Raspberry Pi's, it can also be configured to run on any single-board computer such as the Nvidia Jetson.
+Additionally, though it was tested  on Raspberry Pi's, it can also be configured to run on any single-board computer such as the Nvidia Jetson by adding more Docker Stages.
+
+## Quickstart
+- Flash a Pico with the motor driver code
+- Clone this repository onto the robot
+- `cd` into the folder and run `docker compose build <image_name>`
+- Run: `docker compose up <image_name> -d` to startup
+- For development images:
+    - Run `docker compose exec <image_name> bash`
+    - Build the source packages: `colcon build`
+    - Source the installation: `source install/setup.bash`
+    - Launch the launch files: `ros2 launch my_bringup hermes.launch.py`
+
+### Images
+
+- `robot_prod` for the robot in production
+- `controller_prod` for the controller in production
+- `robot_dev` for the robot in development
+- `controller_dev` for the controller in development
+- `laptop_dev` for the laptop to visualize output
+
+#### Production vs. Development
+- In production, you cannot edit the source ROS packages after building the Docker File. 
+- Production containers auto-start on boot, the only way to shut them off is to run `docker compose down`.
+- To view output in production, use `docker compose logs -f <image_name>`
 
 
 ## Description
@@ -49,7 +72,7 @@ For more information on individual packages, navigate to their folders and view 
 
 #### Drive System
 
-The `skid_steer` plugin of the `ros2_control` library
+The `skid_steer` plugin of the `ros2_control` library was used to drive the robot, located within `hermes_description/
 
 #### Heartbeat
 
@@ -58,17 +81,20 @@ The `skid_steer` plugin of the `ros2_control` library
 The main heartbeat however, comes from the Pico Motor Driver, shutting off the motors.
 The `cmd_vel` drive commands act as a heartbeat, if they stop coming, it means the connection is lost.
 
-### Camera
+#### Camera
 `my_bringup` launches the realsense camera node through the [`realsense_ros`](https://github.com/realsenseai/realsense-ros) library.
 
 
-### LiDAR
+#### LiDAR
 `my_bringup` launches the LiDAR node using the [`ldrobot-lidar-ros2`](https://github.com/Myzhar/ldrobot-lidar-ros2/tree/main) library.
 
 
+#### Development Features
+Github should send an email to the author who pushed a commit if the Docker builds listed in the `test-docker.yml` matrix workflow failed.
+
 ## Demonstration Video
 
-[TODO: Create short YouTube video of operation and features, or a GIF of operation]
+[TODO: Create short (8~10 mins) YouTube video of operation and features]
 
 ## Installation
 
@@ -76,14 +102,19 @@ The `cmd_vel` drive commands act as a heartbeat, if they stop coming, it means t
 
 
 ## Usage
+In development images, you can startup each subsystem
 
-### In DEV
-- Running the LiDAR
-- Running the Camera
-- Running the Drive System
+### On the Robot
+- Running the LiDAR: `ros2 launch my_bringup lidar.launch.py`
+- Running the Camera: `ros2 launch my_bringup camera.launch.py`
+- Running the Drive Control System: `ros2 launch hermes_description drive.launch.py`
 
-### In PROD
-- [Production Deployment](https://fermilab-robotics.github.io/robotics-documentation/getting-started/quickstart.html)
+### On the Controller
+- Running the joystick: `ros2 launch my_bringup joystick.launch.py`
+- Running the camera view: `ros2 run rqt_image_view rqt_image_view`
+    - Select various feeds (e.g. Depth Camera, Color Raw, Compressed)
+
+Refer to [quickstart](#quickstart) for production deployment.
 
 ## Troubleshooting
 
@@ -98,8 +129,8 @@ The `cmd_vel` drive commands act as a heartbeat, if they stop coming, it means t
 - [Mid-Internship New Perspectives 2026 Presentation](https://indico.fnal.gov/event/73553/contributions/344399/)
 
 ## Roadmap
-[Future work](https://fermilab-robotics.github.io/robotics-documentation/future_work/index.html)
 
+[Future work](https://fermilab-robotics.github.io/robotics-documentation/future_work/index.html)
 
 
 ## Authors and acknowledgement
@@ -120,3 +151,30 @@ Thank you—Jeremy Arnold, Chris Olson,  Suzanna Stevenson, Jennifer Case, Keith
 Thank you Donovan Tooke for being my mentor and checking in on my project progress.
 
 Thank you to everyone in industrial controls for always being there to help me!
+
+## License
+
+This is free and unencumbered software released into the public domain.
+
+Anyone is free to copy, modify, publish, use, compile, sell, or
+distribute this software, either in source code form or as a compiled
+binary, for any purpose, commercial or non-commercial, and by any
+means.
+
+In jurisdictions that recognize copyright laws, the author or authors
+of this software dedicate any and all copyright interest in the
+software to the public domain. We make this dedication for the benefit
+of the public at large and to the detriment of our heirs and
+successors. We intend this dedication to be an overt act of
+relinquishment in perpetuity of all present and future rights to this
+software under copyright law.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+For more information, please refer to <https://unlicense.org/>
