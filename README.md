@@ -7,9 +7,14 @@ The drive system uses the `ros2_control` library.
 
 Though it was originally tested on the HERMES robot, in principle, it is capable of running on RVR as well. [RVR Migration Guide](https://fermilab-robotics.github.io/robotics-documentation/getting-started/setting-up-RVR.html)
 
+<img width="998" height="568" alt="System_Architecture drawio" src="https://github.com/user-attachments/assets/939b49a9-779c-43fd-b203-f42f64ec0004" />
+
 Additionally, though it was tested  on Raspberry Pi's, it can also be configured to run on any single-board computer such as the Nvidia Jetson by adding more Docker Stages.
 
+<img width="674" height="491" alt="Docker Multi_Stage Build Tree" src="https://github.com/user-attachments/assets/f46553bf-1d44-4287-8064-43a8e47302ba" />
+
 ## Quickstart
+
 - Flash a Pico with the motor driver code
 - Clone this repository onto the robot
 - `cd` into the folder and run `docker compose build <image_name>`
@@ -35,7 +40,7 @@ Additionally, though it was tested  on Raspberry Pi's, it can also be configured
 
 
 ## Description
-
+<img width="998" height="568" alt="System_Architecture" src="https://github.com/user-attachments/assets/1e6c458f-faa4-498c-8a47-38de20742a62" />
 
 ### Background
 Previously, the code for Fermilab's accelerator robotics fleet was scattered across multiple repositories and branches:
@@ -68,6 +73,7 @@ This project aims to unify the codebase into one repository by utilizing ROS2 an
 For more information on individual packages, navigate to their folders and view the individual README's
 
 ### Features
+<img width="864" height="462" alt="ROS2 Node Diagram" src="https://github.com/user-attachments/assets/1da78a1b-84da-45c7-85fd-01d3443cde33" />
 
 
 #### Drive System
