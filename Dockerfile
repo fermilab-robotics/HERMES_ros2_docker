@@ -208,6 +208,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     liblgpio-dev \
      # for lidar:
     libudev-dev \
+    udev \
     # Note, we need to use the pip gpiozero
     swig \
     python3-dev \

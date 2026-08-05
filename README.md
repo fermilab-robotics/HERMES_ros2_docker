@@ -27,6 +27,7 @@ Additionally, though it was tested  on Raspberry Pi's, it can also be configured
 
 #### List of Images
 - `robot_prod` for the robot in production
+(note: `udev` rules must be configured FROM outside the container for the lidar node to work in production.)
 - `controller_prod` for the controller in production
 - `robot_dev` for the robot in development
 - `controller_dev` for the controller in development
@@ -93,12 +94,13 @@ The `cmd_vel` drive commands act as a heartbeat, if they stop coming, it means t
 #### LiDAR
 `my_bringup` launches the LiDAR node using the [`ldrobot-lidar-ros2`](https://github.com/Myzhar/ldrobot-lidar-ros2/tree/main) library.
 
+Note: Ensure the `udev` rules are configured before launching LiDAR.
+You may need to install `udev` in order for this to work.
 
 #### Development Features
 Github should send an email to the author who pushed a commit if the Docker builds listed in the `test-docker.yml` matrix workflow failed.
 
 ## Demonstration Video
-
 [TODO: Create short (8~10 mins) YouTube video of operation and features]
 
 ## Installation
@@ -111,7 +113,7 @@ In development images, you can startup each subsystem
 
 ### On the Robot
 - Running the LiDAR: `ros2 launch my_bringup lidar.launch.py`
-Note: `udev` rule must be configured on the host machine by running the `./create_udev_rules.sh` script before doing this.
+Note: `udev` rule must be configured on the host machine by running the `./scripts/create_udev_rules.sh` script before doing this.
     - See: [Lidar Library Docs](https://myzhar.tech/projects/ros2/ldrobot-lidar-ros2/#udev-rules)
 
 - Running the Camera: `ros2 launch my_bringup camera.launch.py`
