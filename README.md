@@ -146,7 +146,7 @@ A huge thanks to my supervisor, Megan Galante for your support throughout this p
 
 Thank you to Adam Watts for your frequent meetings and mentorship over this summer!
 
-Thank you—Jeremy Arnold, Chris Olson,  Suzanna Stevenson, Jennifer Case, Keith Engell.
+Thank you—Zachary Wilson, Ryan, Jeremy Arnold, Chris Olson,  Suzanna Stevenson, Jennifer Case, Keith Engell.
 
 Thank you Donovan Tooke for being my mentor and checking in on my project progress.
 
