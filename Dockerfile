@@ -115,6 +115,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     ros-${ROS_DISTRO}-compressed-image-transport \
     ros-${ROS_DISTRO}-image-view \
     ros-${ROS_DISTRO}-rqt-image-view  \
+    ros-${ROS_DISTRO}-rviz2 \
     ros-${ROS_DISTRO}-teleop-twist-keyboard \
      # ROS2 control:
     ros-${ROS_DISTRO}-ros2-control \
@@ -141,7 +142,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     ros-${ROS_DISTRO}-joint-state-publisher-gui \
     ros-${ROS_DISTRO}-ros-gz \
     ros-${ROS_DISTRO}-rviz2 \
-    ros-${ROS_DISTRO}-rqt* \
+    #ros-${ROS_DISTRO}-rqt* \
     ros-${ROS_DISTRO}-gz-ros2-control \
     git \
     gdb \
@@ -206,8 +207,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     liblgpio-dev \
-     # for lidar:
-    libudev-dev \
+     # for lidar: update: Not needed inside container
+    # libudev-dev \
+    # udev \
     # Note, we need to use the pip gpiozero
     swig \
     python3-dev \
@@ -241,8 +243,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release" \
     && chown -R ros:ros ${UNDERLAY_WS} \
+    ## have the underlay sourced automatically whenever we enter the bash terminal
     && echo "source ${UNDERLAY_WS}/install/local_setup.bash" >> /home/ros/.bashrc \
-    # Overlay hasn't been built yet at image-build time 
+    # Overlay hasn't been built yet at image-build time, have it sourced automatically when we enter the bash terminal
     && echo '[ -f /home/ros/ws/install/local_setup.bash ] && source /home/ros/ws/install/local_setup.bash' >> /home/ros/.bashrc
 
 
