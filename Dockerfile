@@ -241,8 +241,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release" \
     && chown -R ros:ros ${UNDERLAY_WS} \
+    ## have the underlay sourced automatically whenever we enter the bash terminal
     && echo "source ${UNDERLAY_WS}/install/local_setup.bash" >> /home/ros/.bashrc \
-    # Overlay hasn't been built yet at image-build time 
+    # Overlay hasn't been built yet at image-build time, have it sourced automatically when we enter the bash terminal
     && echo '[ -f /home/ros/ws/install/local_setup.bash ] && source /home/ros/ws/install/local_setup.bash' >> /home/ros/.bashrc
 
 

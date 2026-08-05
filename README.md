@@ -111,6 +111,9 @@ In development images, you can startup each subsystem
 
 ### On the Robot
 - Running the LiDAR: `ros2 launch my_bringup lidar.launch.py`
+Note: `udev` rule must be configured on the host machine by running the `./create_udev_rules.sh` script before doing this.
+    - See: [Lidar Library Docs](https://myzhar.tech/projects/ros2/ldrobot-lidar-ros2/#udev-rules)
+
 - Running the Camera: `ros2 launch my_bringup camera.launch.py`
 - Running the Drive Control System: `ros2 launch hermes_description drive.launch.py`
 
