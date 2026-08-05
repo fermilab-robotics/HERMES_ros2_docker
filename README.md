@@ -7,11 +7,8 @@ The drive system uses the `ros2_control` library.
 
 Though it was originally tested on the HERMES robot, in principle, it is capable of running on RVR as well. [RVR Migration Guide](https://fermilab-robotics.github.io/robotics-documentation/getting-started/setting-up-RVR.html)
 
-<img width="998" height="568" alt="System_Architecture drawio" src="https://github.com/user-attachments/assets/939b49a9-779c-43fd-b203-f42f64ec0004" />
-
 Additionally, though it was tested  on Raspberry Pi's, it can also be configured to run on any single-board computer such as the Nvidia Jetson by adding more Docker Stages.
 
-<img width="674" height="491" alt="Docker Multi_Stage Build Tree" src="https://github.com/user-attachments/assets/f46553bf-1d44-4287-8064-43a8e47302ba" />
 
 ## Quickstart
 
@@ -26,6 +23,7 @@ Additionally, though it was tested  on Raspberry Pi's, it can also be configured
     - Launch the launch files: `ros2 launch my_bringup hermes.launch.py`
 
 ### Images
+<img width="674" height="491" alt="Docker Multi_Stage Build Tree" src="https://github.com/user-attachments/assets/f46553bf-1d44-4287-8064-43a8e47302ba" />
 
 - `robot_prod` for the robot in production
 - `controller_prod` for the controller in production
