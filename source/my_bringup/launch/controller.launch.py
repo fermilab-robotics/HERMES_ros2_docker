@@ -26,6 +26,22 @@ def generate_launch_description():
         output='screen'
     )
 
+    rviz2_config = PathJoinSubstitution(
+        FindPackageShare('my_bringup'),
+        'config',
+        'controller.rviz'
+    )
+
+    rviz2_node = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen',
+        arguments=[["-d"], [rviz2_config]]
+    )
+
+    ld.add_action(rviz2_node)
+
     ld.add_action(rqt_image_view_node)
 
 
