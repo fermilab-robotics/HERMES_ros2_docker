@@ -41,8 +41,18 @@ def generate_launch_description():
         )
     )
 
+    lidar_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([
+                FindPackageShare("my_bringup"),
+                "launch",
+                "lidar.launch.py"
+            ])
+        )
+    )
 
     return LaunchDescription([
         camera_launch,
-        drive_system_launch
+        drive_system_launch,
+        lidar_launch
     ])

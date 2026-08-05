@@ -10,8 +10,6 @@ from launch.substitutions import PathJoinSubstitution
 
 def generate_launch_description():
 
-    ld = LaunchDescription()
-
     # For LIDAR
     # TODO: Fix: interferes with URDF
     # lidar_dir = get_package_share_directory('ldlidar_node')
@@ -26,6 +24,4 @@ def generate_launch_description():
         )
     )
 
-    ld.add_action(lidar_launch)
-
-    return ld
+    return LaunchDescription([lidar_launch])
