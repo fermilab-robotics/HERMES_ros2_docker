@@ -49,7 +49,7 @@ def generate_launch_description():
     # Include LDLidar launch
     ldlidar_launch = IncludeLaunchDescription(
         launch_description_source=PythonLaunchDescriptionSource([
-            get_package_share_directory('ldlidar_node'),
+            get_package_share_directory('my_bringup'), # Link to our own modified file
             '/launch/ldlidar_bringup.launch.py'
         ]),
         launch_arguments={

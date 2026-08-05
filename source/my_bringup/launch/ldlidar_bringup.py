@@ -13,6 +13,8 @@
 # limitations under the License.
 ###########################################################################
 
+# This file has been modified to remove the URDF and RSP (Robot state publisher)
+
 import os
 from re import L
 
