@@ -21,6 +21,8 @@ from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
+
 
 
 def generate_launch_description():
@@ -48,9 +50,10 @@ def generate_launch_description():
 
     # Include LDLidar launch
     ldlidar_launch = IncludeLaunchDescription(
-        launch_description_source=PythonLaunchDescriptionSource([
-            get_package_share_directory('my_bringup'), # Link to our own modified file
-            '/launch/ldlidar_bringup.launch.py'
+        PythonLaunchDescriptionSource([
+            FindPackageShare('my_bringup'), # Link to our own modified file
+            'launch',
+            'ldlidar_bringup.launch.py'
         ]),
         launch_arguments={
             'node_name': 'ldlidar_node'
