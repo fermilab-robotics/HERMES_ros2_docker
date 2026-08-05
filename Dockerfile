@@ -206,9 +206,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     liblgpio-dev \
-     # for lidar:
-    libudev-dev \
-    udev \
+     # for lidar: update: Not needed inside container
+    # libudev-dev \
+    # udev \
     # Note, we need to use the pip gpiozero
     swig \
     python3-dev \
