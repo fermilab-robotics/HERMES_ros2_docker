@@ -26,11 +26,11 @@ def generate_launch_description():
         output='screen'
     )
 
-    rviz2_config = PathJoinSubstitution(
+    rviz2_config = PathJoinSubstitution([
         FindPackageShare('my_bringup'),
         'config',
         'controller.rviz'
-    )
+    ])
 
     rviz2_node = Node(
         package='rviz2',
